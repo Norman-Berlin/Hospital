@@ -1,0 +1,1195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <link rel="icon" type="image/x-icon" href="favicon.png">
+    <title>MediCare Hospital - Sign Up</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
+        :root {
+            --primary-blue: #3498db;
+            --dark-blue: #2980b9;
+            --light-blue: #e8f4fc;
+            --text-dark: #2c3e50;
+            --text-light: #7f8c8d;
+            --border-color: #e0e0e0;
+            --success-green: #2ecc71;
+            --error-red: #e74c3c;
+            --doctor-color: #3498db;
+            --patient-color: #2ecc71;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--text-dark);
+            background-color: #f8f9fa;
+            overflow-x: hidden;
+        }
+        
+        .professional-navbar {
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            padding: 12px 0;
+            transition: all 0.3s ease;
+        }
+        
+        .sticky-nav {
+            position: sticky;
+            top: 20px;
+            margin: 0 30px;
+            z-index: 1050;
+            border-radius: 50px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .sticky-nav.scrolled {
+            background: rgba(255, 255, 255, 0.98);
+            box-shadow: 0 6px 25px rgba(0,0,0,0.15);
+            padding-top: 0.3rem;
+            padding-bottom: 0.3rem;
+            top: 0;
+            margin: 0;
+            border-radius: 0;
+        }
+        
+        .navbar-brand {
+            color: var(--text-dark);
+            font-size: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+        
+        .navbar-brand:hover {
+            transform: scale(1.05);
+        }
+        
+        .navbar-brand i {
+            color: var(--primary-blue);
+        }
+        
+        .nav-link {
+            color: var(--text-dark) !important;
+            font-weight: 500;
+            margin: 0 8px;
+            transition: color 0.3s;
+            position: relative;
+        }
+        
+        .nav-link:hover, .nav-link.active {
+            color: var(--primary-blue) !important;
+        }
+        
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--primary-blue);
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+        
+        .custom-toggler {
+            border: none;
+            padding: 4px 8px;
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+        
+        .custom-toggler:hover {
+            transform: scale(1.1);
+        }
+        
+        .custom-toggler .navbar-toggler-icon {
+            transition: opacity 0.3s;
+        }
+        
+        .custom-toggler .close-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 1.5rem;
+            line-height: 1;
+        }
+        
+        .custom-toggler[aria-expanded="true"] .navbar-toggler-icon {
+            opacity: 0;
+        }
+        
+        .custom-toggler[aria-expanded="true"] .close-icon {
+            opacity: 1;
+        }
+        
+        /* Sign Up Button Styles */
+        .signup-btn {
+            background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue));
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 8px 20px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(52, 152, 219, 0.2);
+            margin-left: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .signup-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+        
+        .signup-btn:hover::before {
+            left: 100%;
+        }
+        
+        .signup-btn:hover {
+            background: linear-gradient(135deg, var(--dark-blue), #2471a3);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(52, 152, 219, 0.3);
+            color: white;
+        }
+        
+        .signup-btn:active {
+            transform: translateY(0);
+        }
+        
+        /* Sign Up Section Styles */
+        .signup-section {
+            padding: 80px 0;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .signup-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: float 20s infinite linear;
+            z-index: 0;
+        }
+        
+        @keyframes float {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            100% { transform: translate(-50px, -50px) rotate(360deg); }
+        }
+        
+        .signup-header {
+            text-align: center;
+            margin-bottom: 50px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .signup-header h1 {
+            color: var(--text-dark);
+            font-weight: 700;
+            margin-bottom: 15px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s ease forwards;
+        }
+        
+        .signup-header p {
+            color: var(--text-light);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s ease 0.2s forwards;
+        }
+        
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .signup-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            height: 100%;
+            border: none;
+            overflow: hidden;
+            position: relative;
+            z-index: 1;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        
+        .signup-card.animate-in {
+            animation: cardSlideIn 0.6s ease forwards;
+        }
+        
+        .doctor-card {
+            animation-delay: 0.3s;
+            border-top: 4px solid var(--doctor-color);
+        }
+        
+        .patient-card {
+            animation-delay: 0.5s;
+            border-top: 4px solid var(--patient-color);
+        }
+        
+        @keyframes cardSlideIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .signup-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+        }
+        
+        .card-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            font-size: 2rem;
+            transition: transform 0.5s ease;
+        }
+        
+        .signup-card:hover .card-icon {
+            transform: rotateY(180deg);
+        }
+        
+        .doctor-card .card-icon {
+            background: rgba(52, 152, 219, 0.1);
+            color: var(--doctor-color);
+        }
+        
+        .patient-card .card-icon {
+            background: rgba(46, 204, 113, 0.1);
+            color: var(--patient-color);
+        }
+        
+        .signup-card h3 {
+            font-weight: 600;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .signup-card p {
+            color: var(--text-light);
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        
+        .form-control {
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 12px 15px;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+            position: relative;
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+            transform: translateY(-2px);
+        }
+        
+        .form-control.success {
+            border-color: var(--success-green);
+            box-shadow: 0 0 0 0.2rem rgba(46, 204, 113, 0.25);
+        }
+        
+        .form-control.error {
+            border-color: var(--error-red);
+            box-shadow: 0 0 0 0.2rem rgba(231, 76, 60, 0.25);
+        }
+        
+        .input-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .form-control.success + .input-icon.success {
+            opacity: 1;
+            color: var(--success-green);
+        }
+        
+        .form-control.error + .input-icon.error {
+            opacity: 1;
+            color: var(--error-red);
+        }
+        
+        .btn-signup {
+            background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue));
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 12px;
+            font-weight: 500;
+            width: 100%;
+            transition: all 0.3s;
+            margin-top: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-signup::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 5px;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.5);
+            opacity: 0;
+            border-radius: 100%;
+            transform: scale(1, 1) translate(-50%);
+            transform-origin: 50% 50%;
+        }
+        
+        .btn-signup:focus:not(:active)::after {
+            animation: ripple 1s ease-out;
+        }
+        
+        @keyframes ripple {
+            0% {
+                transform: scale(0, 0);
+                opacity: 0.5;
+            }
+            100% {
+                transform: scale(20, 20);
+                opacity: 0;
+            }
+        }
+        
+        .btn-signup:hover {
+            background: linear-gradient(135deg, var(--dark-blue), #2471a3);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3);
+        }
+        
+        .btn-signup:active {
+            transform: translateY(0);
+        }
+        
+        .btn-signup.loading {
+            pointer-events: none;
+            opacity: 0.7;
+        }
+        
+        .btn-signup.loading::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            margin: -10px 0 0 -10px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .signup-links {
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .signup-links a {
+            color: var(--primary-blue);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            position: relative;
+        }
+        
+        .signup-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background-color: var(--primary-blue);
+            transition: width 0.3s;
+        }
+        
+        .signup-links a:hover::after {
+            width: 100%;
+        }
+        
+        .signup-links a:hover {
+            text-decoration: none;
+        }
+        
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 30px 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .divider::before, .divider::after {
+            content: "";
+            flex: 1;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .divider span {
+            padding: 0 15px;
+            color: var(--text-light);
+            font-size: 0.9rem;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.05);
+        }
+        
+        /* Toast notifications */
+        .toast-container {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            z-index: 1060;
+        }
+        
+        .toast {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            padding: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            max-width: 350px;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+        }
+        
+        .toast.show {
+            transform: translateX(0);
+        }
+        
+        .toast.success {
+            border-left: 4px solid var(--success-green);
+        }
+        
+        .toast.error {
+            border-left: 4px solid var(--error-red);
+        }
+        
+        .toast-icon {
+            font-size: 1.5rem;
+            margin-right: 15px;
+        }
+        
+        .toast.success .toast-icon {
+            color: var(--success-green);
+        }
+        
+        .toast.error .toast-icon {
+            color: var(--error-red);
+        }
+        
+        .toast-content {
+            flex: 1;
+        }
+        
+        .toast-close {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: opacity 0.3s;
+        }
+        
+        .toast-close:hover {
+            opacity: 1;
+        }
+        
+        /* Form step indicators */
+        .step-indicator {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+        
+        .step {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 10px;
+            font-weight: bold;
+            color: white;
+            transition: all 0.3s;
+        }
+        
+        .step.active {
+            background-color: var(--primary-blue);
+            transform: scale(1.1);
+        }
+        
+        .step.completed {
+            background-color: var(--success-green);
+        }
+        
+        .step-line {
+            height: 2px;
+            background-color: #e0e0e0;
+            flex: 1;
+            margin: 0 5px;
+            align-self: center;
+        }
+        
+        .step-line.completed {
+            background-color: var(--success-green);
+        }
+        
+        .form-step {
+            display: none;
+        }
+        
+        .form-step.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Mobile adjustments */
+        @media (max-width: 991.98px) {
+            .sticky-nav {
+                margin: 0;
+                border-radius: 0;
+                top: 0;
+            }
+            
+            .signup-btn {
+                margin: 15px 0 0 0;
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .navbar-nav {
+                padding-bottom: 10px;
+            }
+            
+            .signup-card {
+                margin-bottom: 30px;
+            }
+        }
+        
+        @media (max-width: 767.98px) {
+            .signup-section {
+                padding: 50px 0;
+            }
+            
+            .signup-header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .toast-container {
+                right: 10px;
+                left: 10px;
+            }
+            
+            .toast {
+                max-width: 100%;
+            }
+            
+            .step-indicator {
+                margin-bottom: 20px;
+            }
+            
+            .step {
+                width: 25px;
+                height: 25px;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white professional-navbar sticky-nav">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="index.html">
+                <i class="fas fa-hospital-alt me-2"></i>MediCare Hospital
+            </a>
+
+            <button class="navbar-toggler custom-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+                <span class="close-icon">×</span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html#home">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html#about">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html#departments">Departments</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html#services">Services</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html#find-doctor">Doctors</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html#contact">Contact</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="login.html">Login</a>
+                    </li>
+                </ul>
+                
+                <!-- Sign Up Button -->
+                <a href="signup.html" class="btn signup-btn">
+                    <i class="fas fa-user-plus"></i> Sign Up
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Toast Notifications -->
+    <div class="toast-container"></div>
+
+    <!-- Sign Up Section -->
+    <section class="signup-section" id="signup">
+        <div class="container">
+            <div class="signup-header">
+                <h1>Create Your MediCare Account</h1>
+                <p>Select your role to create a new account with MediCare Hospital</p>
+            </div>
+            
+            <div class="row justify-content-center">
+                <!-- Doctor Sign Up Card -->
+                <div class="col-lg-5 col-md-6 mb-4">
+                    <div class="card signup-card doctor-card">
+                        <div class="card-body p-4">
+                            <div class="card-icon">
+                                <i class="fas fa-user-md"></i>
+                            </div>
+                            <h3>Doctor Registration</h3>
+                            <p>Join our network of healthcare professionals</p>
+                            
+                            <!-- Step Indicator -->
+                            <div class="step-indicator">
+                                <div class="step active">1</div>
+                                <div class="step-line"></div>
+                                <div class="step">2</div>
+                            </div>
+                            
+                            <form id="doctorSignupForm">
+                                <!-- Step 1: Basic Information -->
+                                <div class="form-step active" id="doctor-step-1">
+                                    <h5 class="mb-3 text-center">Basic Information</h5>
+                                    
+                                    <div class="mb-3 position-relative">
+                                        <input type="text" class="form-control" name="full_name" placeholder="Full Name" required>
+                                        <i class="fas fa-check input-icon success"></i>
+                                        <i class="fas fa-exclamation input-icon error"></i>
+                                    </div>
+                                    
+                                    <div class="mb-3 position-relative">
+                                        <input type="email" class="form-control" name="email" placeholder="Email Address" required>
+                                        <i class="fas fa-check input-icon success"></i>
+                                        <i class="fas fa-exclamation input-icon error"></i>
+                                    </div>
+                                    
+                                    <div class="mb-3 position-relative">
+                                        <input type="password" class="form-control" name="password" placeholder="Password" required>
+                                        <i class="fas fa-check input-icon success"></i>
+                                        <i class="fas fa-exclamation input-icon error"></i>
+                                    </div>
+                                    
+                                    <div class="mb-3 position-relative">
+                                        <input type="password" class="form-control" name="password" placeholder="Confirm Password" required>
+                                        <i class="fas fa-check input-icon success"></i>
+                                        <i class="fas fa-exclamation input-icon error"></i>
+                                    </div>
+                                    
+                                    <button type="button" class="btn btn-signup next-step" data-next="doctor-step-2">Next</button>
+                                </div>
+                                
+                                <!-- Step 2: Professional Information -->
+                                <div class="form-step" id="doctor-step-2">
+                                    <h5 class="mb-3 text-center">Professional Information</h5>
+
+                                    
+                                    <div class="mb-3">
+                                        <select class="form-control" name="specialization" required>
+                                            <option value="" disabled selected>Select Specialization</option>
+                                            <option value="cardiology">Cardiology</option>
+                                            <option value="neurology">Neurology</option>
+                                            <option value="pediatrics">Pediatrics</option>
+                                            <option value="orthopedics">Orthopedics</option>
+                                            <option value="dermatology">Dermatology</option>
+                                            <option value="psychiatry">Psychiatry</option>
+                                            <option value="surgery">Surgery</option>
+                                            <option value="other">Other</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="mb-3 position-relative">
+                                        <input type="number" class="form-control" name="experience_years" placeholder="Years of Experience" min="0" max="50" required>
+                                        <i class="fas fa-check input-icon success"></i>
+                                        <i class="fas fa-exclamation input-icon error"></i>
+                                    </div>
+                                    
+                                    <div class="mb-3 position-relative">
+                                        <input type="text" class="form-control" name="hospital_name" placeholder="Hospital/Clinic Name" required>
+                                        <i class="fas fa-check input-icon success"></i>
+                                        <i class="fas fa-exclamation input-icon error"></i>
+                                    </div>
+                                    
+                                    <div class="d-flex justify-content-between">
+                                        <button type="button" class="btn btn-outline-secondary prev-step" data-prev="doctor-step-1">Back</button>
+                                        <button type="submit" class="btn btn-signup">Create Account</button>
+                                    </div>
+                                </div>
+                            </form>
+                            
+                            <div class="signup-links">
+                                <a href="login.html">Already have an account? Login</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-2 col-md-12 d-flex align-items-center justify-content-center my-4">
+                    <div class="divider d-none d-lg-block">
+                        <span>OR</span>
+                    </div>
+                </div>
+                
+                <!-- Patient Sign Up Card -->
+                <div class="col-lg-5 col-md-6 mb-4">
+                    <div class="card signup-card patient-card">
+                        <div class="card-body p-4">
+                            <div class="card-icon">
+                                <i class="fas fa-user-injured"></i>
+                            </div>
+                            <h3>Patient Registration</h3>
+                            <p>Create your patient account to access healthcare services</p>
+                            
+                            <!-- Step Indicator -->
+                            <div class="step-indicator">
+                                <div class="step active">1</div>
+                                <div class="step-line"></div>
+                                <div class="step">2</div>
+                            </div>
+                            
+                            <form id="patientSignupForm">
+                                <!-- Step 1: Basic Information -->
+                                <div class="form-step active" id="patient-step-1">
+                                    <h5 class="mb-3 text-center">Basic Information</h5>
+                                    
+                                    <div class="mb-3 position-relative">
+                                        <input type="text" class="form-control" name="full_name" placeholder="Full Name" required>
+                                        <i class="fas fa-check input-icon success"></i>
+                                        <i class="fas fa-exclamation input-icon error"></i>
+                                    </div>
+                                    
+                                    <div class="mb-3 position-relative">
+                                        <input type="email" class="form-control" name="email" placeholder="Email Address" required>
+                                        <i class="fas fa-check input-icon success"></i>
+                                        <i class="fas fa-exclamation input-icon error"></i>
+                                    </div>
+                                    <div class="mb-3 position-relative">
+                                        <input type="password" class="form-control" name="password" placeholder="Password" required>
+                                        <i class="fas fa-check input-icon success"></i>
+                                        <i class="fas fa-exclamation input-icon error"></i>
+                                    </div>
+                                    
+                                    <div class="mb-3 position-relative">
+                                        <input type="password" class="form-control" name="confirm_password" placeholder="Confirm Password" required>
+                                        <i class="fas fa-check input-icon success"></i>
+                                        <i class="fas fa-exclamation input-icon error"></i>
+                                    </div>
+                                    
+                                    <button type="button" class="btn btn-signup next-step" data-next="patient-step-2">Next</button>
+                                </div>
+                                
+                                <!-- Step 2: Personal Information -->
+                                <div class="form-step" id="patient-step-2">
+                                    <h5 class="mb-3 text-center">Personal Information</h5>
+                                    
+                                    <div class="mb-3 position-relative">
+                                        <input type="date" class="form-control" name="dob" placeholder="Date of Birth" required>
+                                        <i class="fas fa-check input-icon success"></i>
+                                        <i class="fas fa-exclamation input-icon error"></i>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <select class="form-control" name="gender" required>
+                                            <option value="" disabled selected>Select Gender</option>
+                                            <option value="male">Male</option>
+                                            <option value="female">Female</option>
+                                            <option value="other">Other</option>
+                                            <option value="prefer-not-to-say">Prefer not to say</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="mb-3 position-relative">
+                                        <input type="tel" class="form-control" name="contact_number" placeholder="Contact Number" required>
+                                        <i class="fas fa-check input-icon success"></i>
+                                        <i class="fas fa-exclamation input-icon error"></i>
+                                    </div>
+                                    
+                                    <div class="mb-3 position-relative">
+                                        <textarea class="form-control" name="address" placeholder="Address" rows="3" required></textarea>
+                                        <i class="fas fa-check input-icon success"></i>
+                                        <i class="fas fa-exclamation input-icon error"></i>
+                                    </div>
+                                    
+                                    <div class="d-flex justify-content-between">
+                                        <button type="button" class="btn btn-outline-secondary prev-step" data-prev="patient-step-1">Back</button>
+                                        <button type="submit" class="btn btn-signup">Create Account</button>
+                                    </div>
+                                </div>
+                            </form>
+                            
+                            <div class="signup-links">
+                                <a href="login.html">Already have an account? Login</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row mt-5">
+                <div class="col-12 text-center">
+                    <p class="text-muted">By creating an account, you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    
+ <script>
+    // Initialize animations when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+        // Animate signup cards
+        const signupCards = document.querySelectorAll('.signup-card');
+        signupCards.forEach(card => {
+            card.classList.add('animate-in');
+        });
+        
+        // Add scroll effect to navbar
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.sticky-nav');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+        
+        // Add input validation with visual feedback
+        const inputs = document.querySelectorAll('.form-control');
+        inputs.forEach(input => {
+            input.addEventListener('blur', function() {
+                if (this.value.trim() !== '') {
+                    this.classList.add('success');
+                    this.classList.remove('error');
+                } else {
+                    this.classList.add('error');
+                    this.classList.remove('success');
+                }
+            });
+            
+            input.addEventListener('input', function() {
+                if (this.value.trim() !== '') {
+                    this.classList.remove('error');
+                }
+            });
+        });
+        
+        // Password confirmation validation
+        const passwordInputs = document.querySelectorAll('input[type="password"]');
+        passwordInputs.forEach(input => {
+            input.addEventListener('blur', function() {
+                const form = this.closest('form');
+                const password = form.querySelector('input[type="password"]:not([placeholder*="Confirm"])');
+                const confirmPassword = form.querySelector('input[placeholder*="Confirm"]');
+                
+                if (password && confirmPassword && password.value !== confirmPassword.value) {
+                    confirmPassword.classList.add('error');
+                    confirmPassword.classList.remove('success');
+                } else if (confirmPassword && confirmPassword.value.trim() !== '') {
+                    confirmPassword.classList.add('success');
+                    confirmPassword.classList.remove('error');
+                }
+            });
+        });
+        
+        // Step navigation
+        document.querySelectorAll('.next-step').forEach(button => {
+            button.addEventListener('click', function() {
+                const currentStep = this.closest('.form-step');
+                const nextStepId = this.getAttribute('data-next');
+                const nextStep = document.getElementById(nextStepId);
+                
+                // Validate current step
+                const inputs = currentStep.querySelectorAll('input[required], select[required]');
+                let isValid = true;
+                
+                inputs.forEach(input => {
+                    if (input.value.trim() === '') {
+                        input.classList.add('error');
+                        isValid = false;
+                    }
+                });
+                
+                if (isValid) {
+                    currentStep.classList.remove('active');
+                    nextStep.classList.add('active');
+                    
+                    // Update step indicator
+                    const indicator = this.closest('.signup-card').querySelector('.step-indicator');
+                    const steps = indicator.querySelectorAll('.step');
+                    const stepLines = indicator.querySelectorAll('.step-line');
+                    
+                    steps[0].classList.remove('active');
+                    steps[0].classList.add('completed');
+                    stepLines[0].classList.add('completed');
+                    steps[1].classList.add('active');
+                } else {
+                    showToast('Please fill in all required fields', 'error');
+                }
+            });
+        });
+        
+        document.querySelectorAll('.prev-step').forEach(button => {
+            button.addEventListener('click', function() {
+                const currentStep = this.closest('.form-step');
+                const prevStepId = this.getAttribute('data-prev');
+                const prevStep = document.getElementById(prevStepId);
+                
+                currentStep.classList.remove('active');
+                prevStep.classList.add('active');
+                
+                // Update step indicator
+                const indicator = this.closest('.signup-card').querySelector('.step-indicator');
+                const steps = indicator.querySelectorAll('.step');
+                const stepLines = indicator.querySelectorAll('.step-line');
+                
+                steps[1].classList.remove('active');
+                steps[0].classList.add('active');
+                steps[0].classList.remove('completed');
+                stepLines[0].classList.remove('completed');
+            });
+        });
+    });
+    
+    // Toast notification function
+    function showToast(message, type = 'success') {
+        const toastContainer = document.querySelector('.toast-container');
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        
+        const icon = type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle';
+        
+        toast.innerHTML = `
+            <i class="fas ${icon} toast-icon"></i>
+            <div class="toast-content">${message}</div>
+            <button class="toast-close"><i class="fas fa-times"></i></button>
+        `;
+        
+        toastContainer.appendChild(toast);
+        
+        // Show toast with animation
+        setTimeout(() => {
+            toast.classList.add('show');
+        }, 100);
+        
+        // Close toast on button click
+        const closeBtn = toast.querySelector('.toast-close');
+        closeBtn.addEventListener('click', function() {
+            toast.classList.remove('show');
+            setTimeout(() => {
+                toastContainer.removeChild(toast);
+            }, 300);
+        });
+        
+        // Auto-remove toast after 5 seconds
+        setTimeout(() => {
+            if (toast.parentNode) {
+                toast.classList.remove('show');
+                setTimeout(() => {
+                    if (toast.parentNode) {
+                        toastContainer.removeChild(toast);
+                    }
+                }, 300);
+            }
+        }, 5000);
+    }
+    
+ // Doctor signup submit
+document.getElementById('doctorSignupForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const formData = new FormData(this);
+    const data = Object.fromEntries(formData.entries()); // auto collects all name=value pairs
+
+    try {
+        const res = await fetch("http://localhost:3050/signup/doctor", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data)
+        });
+
+        const result = await res.json();
+
+        if (res.ok) {
+            // ✅ Build license display with copy button
+            const licenseBox = `
+                <div style="padding:10px; border:2px dashed #28a745; border-radius:8px; background:#f6fff6; margin-bottom:10px; text-align:center;">
+                    <strong>License Number:</strong> 
+                    <span id="doctorLicense">${result.license_number}</span>
+                    <button onclick="copyLicense()" style="margin-left:10px; padding:3px 8px; font-size:12px; cursor:pointer; background:#28a745; color:white; border:none; border-radius:4px;">
+                        Copy
+                    </button>
+                </div>
+                <div>✅ Doctor account created successfully!<br>(The license number has also been sent to your email)</div>
+            `;
+
+            // ✅ Show in your existing toast box
+            showToast(licenseBox, 'success');
+
+            // ✅ Give time to copy before redirect
+            setTimeout(() => {
+                window.location.href = "login.html";
+            }, 8000);
+        } else {
+            showToast(result.message, 'error');
+        }
+    } catch (err) {
+        showToast("Server error, please try again later", "error");
+    }
+});
+
+// ✅ Clipboard copy function
+function copyLicense() {
+    const licenseText = document.getElementById("doctorLicense").textContent;
+    navigator.clipboard.writeText(licenseText).then(() => {
+        showToast("License number copied to clipboard!", "success");
+    }).catch(() => {
+        showToast("Failed to copy license number", "error");
+    });
+}
+
+    // Patient signup submit
+   // Patient signup submit
+document.getElementById('patientSignupForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const formData = new FormData(this);
+    const data = Object.fromEntries(formData.entries());
+
+    // ✅ Password confirmation
+    if(data.password !== data.confirm_password){
+        showToast("Passwords do not match", "error");
+        return;
+    }
+
+    // ✅ Remove confirm_password before sending
+    delete data.confirm_password;
+
+    // ✅ Optional fields: if empty, send null
+    const optionalFields = ['contact_number','address','blood_group','allergies','emergency_contact'];
+    optionalFields.forEach(field => {
+        if(!data[field] || data[field].trim() === "") data[field] = null;
+    });
+
+    try {
+        const res = await fetch("http://localhost:3050/signup/patient", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data)
+        });
+
+        const result = await res.json();
+        if(res.ok){
+            showToast(result.message, 'success');
+            setTimeout(() => window.location.href = "login.html", 2000);
+        } else {
+            showToast(result.message, 'error');
+        }
+    } catch (err) {
+        console.error(err);
+        showToast("Server error, please try again later", "error");
+    }
+});
+
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,1744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link rel="icon" type="image/x-icon" href="favicon.png">
+    <title>Accountant Dashboard - Medicare System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #1e40af;
+            --primary-light: #3b82f6;
+            --primary-dark: #1e3a8a;
+            --secondary: #059669;
+            --danger: #dc2626;
+            --warning: #d97706;
+            --info: #0891b2;
+            --light: #f8fafc;
+            --dark: #1e293b;
+            --gray: #64748b;
+            --light-gray: #e2e8f0;
+            --border-radius: 10px;
+            --box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f1f5f9;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        /* Header Styles */
+        header {
+            background: var(--primary);
+            color: #fff;
+            padding: 18px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Navigation */
+        nav {
+            display: flex;
+            justify-content: flex-start;
+            background: var(--primary-light);
+            padding: 0;
+            overflow-x: auto;
+        }
+
+        nav button {
+            background: transparent;
+            border: none;
+            padding: 16px 24px;
+            color: rgba(255,255,255,0.9);
+            cursor: pointer;
+            font-weight: 500;
+            transition: var(--transition);
+            border-bottom: 3px solid transparent;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        nav button:hover {
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+        }
+
+        nav button.active {
+            color: #fff;
+            border-bottom: 3px solid #fff;
+            background: rgba(255,255,255,0.1);
+        }
+
+        /* Container */
+        .container {
+            padding: 30px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        h2 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Stats Cards */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: #fff;
+            border-radius: var(--border-radius);
+            padding: 24px;
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
+            border-left: 4px solid var(--primary);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+        }
+
+        .stat-card i {
+            font-size: 28px;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 5px;
+            color: var(--dark);
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: var(--gray);
+            font-weight: 500;
+        }
+
+        /* Table Styles */
+        .table-wrapper {
+            background: #fff;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+            margin-bottom: 30px;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 800px;
+        }
+
+        th, td {
+            padding: 16px;
+            text-align: left;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        th {
+            background: var(--primary);
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        tr:hover {
+            background: #f8fafc;
+        }
+
+        /* Badge Styles */
+        .badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            color: #fff;
+            font-size: 12px;
+            font-weight: 500;
+            display: inline-block;
+            text-align: center;
+            min-width: 80px;
+        }
+
+        .paid {
+            background: var(--secondary);
+        }
+
+        .pending {
+            background: var(--warning);
+        }
+
+        .overdue {
+            background: var(--danger);
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-success {
+            background: var(--secondary);
+            color: #fff;
+        }
+
+        .btn-success:hover {
+            background: #047857;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: #fff;
+        }
+
+        .btn-danger:hover {
+            background: #b91c1c;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            width: 95%;
+            max-width: 600px;
+            max-height: 90%;
+            overflow: auto;
+            position: relative;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--gray);
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1);
+        }
+
+        /* Message Box */
+        .message-box {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            padding: 15px 20px;
+            max-width: 300px;
+            z-index: 1000;
+            transform: translateX(150%);
+            transition: transform 0.3s ease;
+            border-left: 4px solid var(--primary);
+        }
+
+        .message-box.show {
+            transform: translateX(0);
+        }
+
+        .message-box.success {
+            border-left-color: var(--secondary);
+        }
+
+        .message-box.error {
+            border-left-color: var(--danger);
+        }
+
+        .message-box.warning {
+            border-left-color: var(--warning);
+        }
+
+        .message-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+
+        .message-title {
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .message-close {
+            background: none;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            color: var(--gray);
+        }
+
+        /* Loading States */
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: var(--gray);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--gray);
+        }
+
+        .empty-state i {
+            font-size: 48px;
+            margin-bottom: 15px;
+            opacity: 0.5;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+
+            header {
+                padding: 15px 20px;
+            }
+
+            nav button {
+                padding: 14px 18px;
+                font-size: 14px;
+            }
+
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .message-box {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 320px;
+    background: white;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    border-radius: 8px;
+    z-index: 99999; /* SUPER IMPORTANT */
+    display: none;
+}
+
+/* Smooth scrolling for the entire page */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Ensure sections are properly positioned for scrolling */
+.section {
+  scroll-margin-top: 20px; /* Adjust based on your header height */
+}
+
+/* Container styling */
+.container {
+  position: relative;
+}
+
+/* Active section highlight */
+.section.visible {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Payment Status Badges */
+.badge {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.badge.paid {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.badge.overdue {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+  animation: pulse 2s infinite;
+}
+
+.badge.pending {
+  background-color: #fff3cd;
+  color: #856404;
+  border: 1px solid #ffeaa7;
+}
+
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.7; }
+  100% { opacity: 1; }
+}
+
+/* Action Buttons */
+.action-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-info {
+  background-color: #17a2b8;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.btn-info:hover {
+  background-color: #138496;
+}
+
+.btn-secondary {
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: not-allowed;
+  font-size: 14px;
+  opacity: 0.7;
+}
+    </style>
+</head>
+<body>
+    <!-- Message Box -->
+    <div class="message-box" id="messageBox">
+        <div class="message-header">
+            <div class="message-title" id="messageTitle">Information</div>
+            <button class="message-close" id="closeMessage">&times;</button>
+        </div>
+        <div class="message-content" id="messageContent">This is a message</div>
+    </div>
+
+    <header>
+        <div class="header-content">
+            <h1><i class="fas fa-calculator"></i> Accountant Dashboard</h1>
+            <div class="user-info">
+                <div class="user-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <span id="accountantName">Accountant</span>
+                <button class="btn-danger" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </div>
+    </header>
+<nav>
+  <button class="active" onclick="showSection('overview')">
+    <i class="fas fa-chart-bar"></i> Overview
+  </button>
+  <button onclick="showSection('billing')">
+    <i class="fas fa-file-invoice-dollar"></i> Billing
+  </button>
+  <button onclick="showSection('payments')">
+    <i class="fas fa-credit-card"></i> Payments
+  </button>
+  <button onclick="showSection('reports')">
+    <i class="fas fa-chart-pie"></i> Reports
+  </button>
+</nav>
+
+    <div class="container">
+        <!-- Overview Section -->
+        <section id="overview" class="section visible">
+            <h2><i class="fas fa-chart-bar"></i> Financial Overview</h2>
+            <div class="stats-container">
+                <div class="stat-card">
+                    <i class="fas fa-money-bill-wave"></i>
+                    <div class="stat-value" id="totalRevenue">KSh 0</div>
+                    <div class="stat-label">Total Revenue</div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-clock"></i>
+                    <div class="stat-value" id="pendingPayments">KSh 0</div>
+                    <div class="stat-label">Pending Payments</div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <div class="stat-value" id="overdueInvoices">KSh 0</div>
+                    <div class="stat-label">Overdue Invoices</div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-users"></i>
+                    <div class="stat-value" id="patientsThisMonth">0</div>
+                    <div class="stat-label">Patients This Month</div>
+                </div>
+            </div>
+
+            <h3><i class="fas fa-history"></i> Recent Payments</h3>
+            <div class="table-wrapper">
+                <table id="recentPaymentsTable">
+                    <thead>
+                        <tr>
+                            <th>Patient</th>
+                            <th>Service</th>
+                            <th>Amount</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="5" class="loading">Loading recent payments...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Billing Section -->
+        <section id="billing" class="section hidden">
+            <h2><i class="fas fa-file-invoice-dollar"></i> Patient Billing</h2>
+            <div class="table-wrapper">
+                <table id="billingTable">
+                    <thead>
+                        <tr>
+                            <th>Appointment ID</th>
+                            <th>Patient Name</th>
+                            <th>Doctor</th>
+                            <th>Service</th>
+                            <th>Amount</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="8" class="loading">Loading billing data...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Payments Section -->
+        <section id="payments" class="section hidden">
+            <h2><i class="fas fa-credit-card"></i> Payment Management</h2>
+            <div class="table-wrapper">
+                <table id="paymentsTable">
+                    <thead>
+                        <tr>
+                            <th>Payment ID</th>
+                            <th>Patient</th>
+                            <th>Appointment</th>
+                            <th>Amount</th>
+                            <th>Due Date</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="7" class="loading">Loading payments...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Reports Section -->
+        <section id="reports" class="section hidden">
+            <h2><i class="fas fa-chart-pie"></i> Financial Reports</h2>
+            <div class="stats-container">
+                <div class="stat-card">
+                    <i class="fas fa-calendar"></i>
+                    <div class="stat-value" id="monthlyRevenue">KSh 0</div>
+                    <div class="stat-label">This Month</div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-calendar-alt"></i>
+                    <div class="stat-value" id="yearlyRevenue">KSh 0</div>
+                    <div class="stat-label">This Year</div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-user-md"></i>
+                    <div class="stat-value" id="topDoctor">-</div>
+                    <div class="stat-label">Top Doctor</div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-procedures"></i>
+                    <div class="stat-value" id="avgBill">KSh 0</div>
+                    <div class="stat-label">Average Bill</div>
+                </div>
+            </div>
+
+            <div class="table-wrapper">
+                <h3>Revenue by Service</h3>
+                <table id="revenueTable">
+                    <thead>
+                        <tr>
+                            <th>Service Type</th>
+                            <th>Total Revenue</th>
+                            <th>Number of Bills</th>
+                            <th>Average Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="4" class="loading">Loading revenue data...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+
+    <!-- Payment Modal -->
+    <div id="paymentModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <h3><i class="fas fa-credit-card"></i> Record Payment</h3>
+            <form id="paymentForm">
+                <div class="form-group">
+                    <label for="patientName">Patient Name</label>
+                    <input type="text" id="patientName" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="appointmentId">Appointment ID</label>
+                    <input type="text" id="appointmentId" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="amountDue">Amount Due</label>
+                    <input type="text" id="amountDue" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="amountPaid">Amount Paid *</label>
+                    <input type="number" id="amountPaid" required min="0">
+                </div>
+                <div class="form-group">
+                    <label for="paymentMethod">Payment Method *</label>
+                    <select id="paymentMethod" required>
+                        <option value="">Select Method</option>
+                        <option value="cash">Cash</option>
+                        <option value="card">Credit Card</option>
+                        <option value="mpesa">M-Pesa</option>
+                        <option value="bank">Bank Transfer</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="paymentDate">Payment Date *</label>
+                    <input type="date" id="paymentDate" required>
+                </div>
+                <div class="form-group">
+                    <label for="notes">Notes</label>
+                    <textarea id="notes" rows="3"></textarea>
+                </div>
+                <button type="submit" class="btn-success">
+                    <i class="fas fa-check"></i> Record Payment
+                </button>
+            </form>
+        </div>
+    </div>
+<script>
+    // Global variables
+let currentAccountant = null;
+let modal = document.getElementById('paymentModal');
+let currentAppointmentId = null;
+
+// Initialize dashboard
+document.addEventListener('DOMContentLoaded', function() {
+
+    loadDashboardData();
+    loadBillingData();
+    loadPaymentsData();
+    loadReportsData();
+
+});
+
+// Load all dashboard data
+async function loadDashboardData() {
+    try {
+        await loadOverviewData();
+        showMessage('Dashboard data loaded successfully!', 'success');
+    } catch (error) {
+        console.error('Error loading dashboard data:', error);
+        showMessage('Error loading dashboard data', 'error');
+    }
+}
+
+
+function showMessage(text, type = 'info') {
+
+    const box = document.getElementById('messageBox');
+    const title = document.getElementById('messageTitle');
+    const content = document.getElementById('messageContent');
+
+    if (!box) return;
+
+    if (type === 'success') title.textContent = 'Success';
+    else if (type === 'error') title.textContent = 'Error';
+    else title.textContent = 'Info';
+
+    content.textContent = text;
+
+    box.style.display = 'block';
+
+    // Auto close
+    setTimeout(() => {
+        box.style.display = 'none';
+    }, 4000);
+}
+
+
+// Close manually
+document.getElementById('closeMessage').onclick = () => {
+    document.getElementById('messageBox').style.display = 'none';
+};
+
+
+// Load overview data
+async function loadOverviewData() {
+    try {
+        // Load financial stats
+        const [revenueRes, pendingRes, overdueRes, patientsRes, topDoctorRes, avgBillRes] = await Promise.all([
+            fetch('/api/finance/total-revenue'),
+            fetch('/api/finance/pending-payments'),
+            fetch('/api/finance/overdue-invoices'),
+            fetch('/api/finance/patients-this-month'),
+            fetch('/api/finance/top-doctor'),
+            fetch('/api/finance/average-bill')
+        ]);
+
+        const revenue = await revenueRes.json();
+        const pending = await pendingRes.json();
+        const overdue = await overdueRes.json();
+        const patients = await patientsRes.json();
+        const topDoctor = await topDoctorRes.json();
+        const avgBill = await avgBillRes.json();
+
+        // Update stats cards
+        document.getElementById('totalRevenue').textContent = `KSh ${revenue.totalRevenue.toLocaleString()}`;
+        document.getElementById('pendingPayments').textContent = `KSh ${pending.pendingPayments.toLocaleString()}`;
+        document.getElementById('overdueInvoices').textContent = `KSh ${overdue.overdueInvoices.toLocaleString()}`;
+        document.getElementById('patientsThisMonth').textContent = patients.patientsThisMonth;
+        document.getElementById('topDoctor').textContent = topDoctor.topDoctor || 'No data';
+        document.getElementById('avgBill').textContent = `KSh ${Math.round(avgBill.avgBill).toLocaleString()}`;
+
+        // Load recent payments
+        const paymentsRes = await fetch('/api/finance/recent-payments');
+        const payments = await paymentsRes.json();
+        displayRecentPayments(payments);
+
+    } catch (error) {
+        console.error('Error loading overview data:', error);
+        throw error;
+    }
+}
+
+// Display recent payments - FIXED to only show paid
+function displayRecentPayments(payments) {
+    const tbody = document.querySelector('#recentPaymentsTable tbody');
+    
+    if (!payments || payments.length === 0) {
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="5" class="empty-state">
+                    <i class="fas fa-inbox"></i>
+                    <div>No paid payments yet</div>
+                </td>
+            </tr>`;
+        return;
+    }
+
+    tbody.innerHTML = payments.map(payment => `
+        <tr>
+            <td>${payment.patient_name}</td>
+            <td>${payment.service}</td>
+            <td>KSh ${parseFloat(payment.amount || 0).toLocaleString()}</td>
+            <td>${payment.date ? new Date(payment.date).toLocaleDateString() : 'N/A'}</td>
+            <td><span class="badge paid">Paid</span></td>
+        </tr>
+    `).join('');
+}
+
+// Load billing data
+async function loadBillingData() {
+  try {
+    // Add timestamp to prevent caching
+    const timestamp = new Date().getTime();
+    const response = await fetch(`/api/accountant/billing?_=${timestamp}`);
+    
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+    
+    const billingData = await response.json();
+    console.log('Loaded billing data:', billingData.length, 'records');
+    
+    // Check if any records show as paid
+    const paidRecords = billingData.filter(bill => 
+      bill.payment_status === 'Completed' || bill.status === 'Completed'
+    );
+    console.log('Paid records in loaded data:', paidRecords.length);
+    
+    displayBillingData(billingData);
+  } catch (error) {
+    console.error('Error loading billing data:', error);
+    showMessage('Error loading billing data', 'error');
+  }
+}
+// Display billing data - FIXED to show correct status
+function displayBillingData(billingData) {
+    const tbody = document.querySelector('#billingTable tbody');
+    
+    if (!billingData || billingData.length === 0) {
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="8" class="empty-state">
+                    <i class="fas fa-inbox"></i>
+                    <div>No billing records found</div>
+                </td>
+            </tr>`;
+        return;
+    }
+
+    tbody.innerHTML = billingData.map(bill => {
+        // Use the payment_status from the backend which is now accurate
+        const status = bill.payment_status || 'pending';
+        const statusClass = status === 'paid' ? 'paid' : 
+                          status === 'overdue' ? 'overdue' : 'pending';
+        
+        // Log for debugging
+        console.log(`Appointment #${bill.appointment_id}: Status = ${status}`);
+        
+        return `
+        <tr>
+            <td>${bill.appointment_id}</td>
+            <td>${bill.patient_name}</td>
+            <td>Dr. ${bill.doctor_name}</td>
+            <td>${bill.service_type}</td>
+            <td>KSh ${parseFloat(bill.amount || 0).toLocaleString()}</td>
+            <td>${bill.appointment_date ? new Date(bill.appointment_date).toLocaleDateString() : 'N/A'}</td>
+            <td><span class="badge ${statusClass}">${status.charAt(0).toUpperCase() + status.slice(1)}</span></td>
+            <td>
+                <div class="action-buttons">
+                    ${status !== 'paid' ? `
+                        <button class="btn-success" onclick="recordPayment(${bill.appointment_id}, '${bill.patient_name}', ${bill.amount})">
+                            <i class="fas fa-credit-card"></i> Pay
+                        </button>
+                    ` : `
+                        <span class="badge paid">Payment Complete</span>
+                    `}
+                    <button class="btn-primary" onclick="viewBillDetails(${bill.appointment_id})">
+                        <i class="fas fa-eye"></i> View
+                    </button>
+                </div>
+            </td>
+        </tr>
+        `;
+    }).join('');
+}
+
+// Load payments data
+async function loadPaymentsData() {
+    try {
+        const res = await fetch('/api/accountant/payments'); 
+        const data = await res.json();
+        displayPaymentsData(data);
+    } catch (err) {
+        console.error(err);
+        showMessage('Failed to load payments', 'error');
+    }
+}
+
+
+// Display payments data - FIXED to show all payments with correct status
+function displayPaymentsData(payments) {
+    const tbody = document.querySelector('#paymentsTable tbody');
+    
+    if (!payments || payments.length === 0) {
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="7" class="empty-state">
+                    <i class="fas fa-inbox"></i>
+                    <div>No payment records found</div>
+                </td>
+            </tr>`;
+        return;
+    }
+
+    tbody.innerHTML = payments.map(payment => {
+        const statusClass = payment.status === 'paid' ? 'paid' : 
+                          payment.status === 'overdue' ? 'overdue' : 'pending';
+        
+        return `
+        <tr>
+            <td>${payment.id}</td>
+            <td>${payment.patient_name}</td>
+            <td>${payment.appointment_id}</td>
+            <td>KSh ${parseFloat(payment.amount || 0).toLocaleString()}</td>
+            <td>${payment.due_date ? new Date(payment.due_date).toLocaleDateString() : 'N/A'}</td>
+            <td><span class="badge ${statusClass}">${payment.status || 'pending'}</span></td>
+            <td>
+                <div class="action-buttons">
+                    <button class="btn-primary" onclick="viewPaymentDetails(${payment.id})">
+                        <i class="fas fa-eye"></i> Details
+                    </button>
+                    ${payment.status !== 'paid' ? `
+                        <button class="btn-success" onclick="recordPayment(${payment.appointment_id})">
+                            <i class="fas fa-credit-card"></i> Pay
+                        </button>
+                    ` : ''}
+                </div>
+            </td>
+        </tr>
+        `;
+    }).join('');
+}
+
+function displayRevenueByService(data) {
+  const tbody = document.querySelector('#revenueTable tbody');
+
+  if (!data || data.length === 0) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="4" class="empty-state">
+          <i class="fas fa-inbox"></i>
+          <div>No revenue data found</div>
+        </td>
+      </tr>`;
+    return;
+  }
+
+  tbody.innerHTML = data.map(row => `
+    <tr>
+      <td>${row.service || 'General Consultation'}</td>
+      <td>KSh ${Number(row.revenue || 0).toLocaleString()}</td>
+      <td>${row.bill_count || 0}</td>
+      <td>KSh ${Number(row.average_amount || 0).toLocaleString()}</td>
+    </tr>
+  `).join('');
+}
+function showSection(sectionId) {
+  // Update active button
+  document.querySelectorAll('nav button').forEach(btn => {
+    btn.classList.remove('active');
+  });
+
+  // Hide all sections
+  document.querySelectorAll('.section').forEach(sec => {
+    sec.classList.add('hidden');
+    sec.classList.remove('visible');
+  });
+
+  // Show the selected section
+  const targetSection = document.getElementById(sectionId);
+  targetSection.classList.remove('hidden');
+  targetSection.classList.add('visible');
+
+  // Smooth scroll to the section
+  setTimeout(() => {
+    targetSection.scrollIntoView({ 
+      behavior: 'smooth', 
+      block: 'start' 
+    });
+  }, 100);
+
+  // Load section data
+  if (sectionId === 'overview') {
+    loadOverviewData();
+  } else if (sectionId === 'billing') {
+    loadBillingData();
+  } else if (sectionId === 'payments') {
+    loadPaymentsData();
+  } else if (sectionId === 'reports') {
+    loadReportsData();
+  }
+}
+
+// View Bill Details - Shows overdue message for pending bills
+function viewBillDetails(appointmentId, patientName, amount, status) {
+  if (status === 'pending' || status === 'Pending') {
+    showMessage(
+      `⚠️ OVERDUE PAYMENT\nPatient: ${patientName}\nAmount Due: KSh ${parseFloat(amount).toLocaleString()}\n\nPlease clear this payment first to avoid service interruption.`,
+      'error'
+    );
+  } else {
+    // For paid bills, show receipt details
+    showMessage(
+      `✅ PAID BILL\nPatient: ${patientName}\nAmount: KSh ${parseFloat(amount).toLocaleString()}\nStatus: ${status}\n\nThis bill has been cleared.`,
+      'success'
+    );
+  }
+}
+
+// View Payment Details
+function viewPaymentDetails(paymentId, patientName, amount, status) {
+  if (status === 'pending' || status === 'Pending') {
+    showMessage(
+      `📋 PAYMENT DUE\nPayment ID: ${paymentId}\nPatient: ${patientName}\nAmount Due: KSh ${parseFloat(amount).toLocaleString()}\nStatus: ${status}\n\nThis payment is overdue. Please process it immediately.`,
+      'warning'
+    );
+  } else {
+    showMessage(
+      `✅ PAYMENT RECEIPT\nPayment ID: ${paymentId}\nPatient: ${patientName}\nAmount: KSh ${parseFloat(amount).toLocaleString()}\nStatus: ${status}\n\nPayment has been processed successfully.`,
+      'success'
+    );
+  }
+}
+
+// Record Payment (Open Modal)
+function recordPayment(appointmentId, patientName, amount, status = 'pending') {
+  if (status === 'Completed' || status === 'paid') {
+    showMessage('This bill has already been paid!', 'info');
+    return;
+  }
+  
+  currentAppointmentId = appointmentId;
+  
+  // Fill modal fields
+  document.getElementById('patientName').value = patientName || 'Patient';
+  document.getElementById('appointmentId').value = appointmentId;
+  document.getElementById('amountDue').value = `KSh ${parseFloat(amount || 0).toLocaleString()}`;
+  document.getElementById('amountPaid').value = amount || '';
+  document.getElementById('paymentDate').value = new Date().toISOString().split('T')[0];
+  
+  // Clear other fields
+  document.getElementById('paymentMethod').value = '';
+  document.getElementById('notes').value = '';
+  
+  // Show modal
+  modal.style.display = 'block';
+}
+
+// Close Modal
+function closeModal() {
+  modal.style.display = 'none';
+  document.getElementById('paymentForm').reset();
+}
+
+// ============ PAYMENT FORM HANDLER ============
+document.getElementById('paymentForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  
+  const appointmentId = document.getElementById('appointmentId').value;
+  const amountPaid = parseFloat(document.getElementById('amountPaid').value);
+  const paymentMethod = document.getElementById('paymentMethod').value;
+  const paymentDate = document.getElementById('paymentDate').value;
+  const notes = document.getElementById('notes').value;
+  const patientName = document.getElementById('patientName').value;
+  
+  if (!amountPaid || !paymentMethod || !paymentDate) {
+    showMessage('Please fill all required fields', 'error');
+    return;
+  }
+  
+  // Disable form during processing
+  const submitBtn = this.querySelector('button[type="submit"]');
+  const originalBtnText = submitBtn.innerHTML;
+  submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+  submitBtn.disabled = true;
+  
+  try {
+    const response = await fetch('/api/accountant/record-payment', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        appointment_id: appointmentId,
+        amount_paid: amountPaid,
+        payment_method: paymentMethod,
+        payment_date: paymentDate,
+        notes: notes
+      })
+    });
+    
+    const data = await response.json();
+    
+    // Re-enable form
+    submitBtn.innerHTML = originalBtnText;
+    submitBtn.disabled = false;
+    
+    if (data.success) {
+      // Show success message
+      showMessage(
+        `✅ CASH PAYMENT RECORDED!\n\n` +
+        `Patient: ${patientName}\n` +
+        `Amount: KSh ${amountPaid.toLocaleString()}\n` +
+        `Status: PAID ✅\n` +
+        `Receipt: ${Date.now().toString().slice(-6)}`,
+        'success'
+      );
+      
+      // Close modal
+      closeModal();
+      
+      // Update UI IMMEDIATELY
+      updateDashboardAfterPayment(appointmentId, patientName, amountPaid);
+      
+      // DO NOT reload data - trust our immediate updates
+      // Data will refresh next time user visits the section
+      
+    } else {
+      showMessage(data.message || 'Payment failed', 'error');
+    }
+  } catch (error) {
+    console.error('Payment error:', error);
+    submitBtn.innerHTML = originalBtnText;
+    submitBtn.disabled = false;
+    showMessage('Network error. Please try again.', 'error');
+  }
+});
+
+// Function to update dashboard immediately after payment
+function updateDashboardAfterPayment(appointmentId, patientName, amountPaid) {
+  console.log('Updating dashboard for payment:', appointmentId, patientName, amountPaid);
+  
+  // 1. Update Pending Payments amount
+  const pendingElement = document.getElementById('pendingPayments');
+  if (pendingElement) {
+    const currentText = pendingElement.textContent;
+    const currentAmount = parseFloat(currentText.replace(/[^0-9.]/g, '') || 0);
+    const newAmount = Math.max(0, currentAmount - amountPaid);
+    pendingElement.textContent = `KSh ${newAmount.toLocaleString()}`;
+  }
+  
+  // 2. Update Total Revenue
+  const revenueElement = document.getElementById('totalRevenue');
+  if (revenueElement) {
+    const currentText = revenueElement.textContent;
+    const currentAmount = parseFloat(currentText.replace(/[^0-9.]/g, '') || 0);
+    const newAmount = currentAmount + amountPaid;
+    revenueElement.textContent = `KSh ${newAmount.toLocaleString()}`;
+  }
+  
+  // 3. Update Recent Payments table
+  const recentPaymentsTable = document.querySelector('#recentPaymentsTable tbody');
+  if (recentPaymentsTable) {
+    // Remove loading row if exists
+    const loadingRow = recentPaymentsTable.querySelector('.loading');
+    if (loadingRow) loadingRow.remove();
+    
+    // Add new payment at the top
+    const newRow = document.createElement('tr');
+    newRow.innerHTML = `
+      <tr>
+        <td>${patientName}</td>
+        <td>Payment</td>
+        <td>KSh ${amountPaid.toLocaleString()}</td>
+        <td>${new Date().toLocaleDateString()}</td>
+        <td><span class="badge paid">paid</span></td>
+      </tr>
+    `;
+    
+    if (recentPaymentsTable.firstChild) {
+      recentPaymentsTable.insertBefore(newRow, recentPaymentsTable.firstChild);
+    } else {
+      recentPaymentsTable.appendChild(newRow);
+    }
+    
+    // Keep only 10 rows
+    const rows = recentPaymentsTable.querySelectorAll('tr');
+    if (rows.length > 10) {
+      recentPaymentsTable.removeChild(rows[rows.length - 1]);
+    }
+  }
+  
+  // 4. Update billing table status for this appointment
+  const billingRows = document.querySelectorAll('#billingTable tbody tr');
+  billingRows.forEach(row => {
+    const cells = row.querySelectorAll('td');
+    if (cells.length > 0 && cells[0].textContent.includes(appointmentId.toString())) {
+      // Update status cell (7th td)
+      if (cells[6]) {
+        cells[6].innerHTML = '<span class="badge paid">PAID</span>';
+      }
+      // Update actions cell (8th td)
+      if (cells[7]) {
+        cells[7].innerHTML = `
+          <div class="action-buttons">
+            <button class="btn-info" onclick="viewBillDetails(${appointmentId}, '${patientName}', ${amountPaid}, 'paid')">
+              <i class="fas fa-eye"></i> View
+            </button>
+            <button class="btn-secondary" disabled>
+              <i class="fas fa-check"></i> Paid
+            </button>
+          </div>
+        `;
+      }
+    }
+  });
+  
+  // 5. Update payments table
+  const paymentsRows = document.querySelectorAll('#paymentsTable tbody tr');
+  paymentsRows.forEach(row => {
+    const cells = row.querySelectorAll('td');
+    if (cells.length > 0 && cells[2].textContent.includes(appointmentId.toString())) {
+      // Update status (6th td)
+      if (cells[5]) {
+        cells[5].innerHTML = '<span class="badge paid">PAID</span>';
+      }
+      // Update actions (7th td)
+      if (cells[6]) {
+        cells[6].innerHTML = `
+          <div class="action-buttons">
+            <button class="btn-info" onclick="viewPaymentDetails(${appointmentId}, '${patientName}', ${amountPaid}, 'paid')">
+              <i class="fas fa-eye"></i> Details
+            </button>
+          </div>
+        `;
+      }
+    }
+  });
+}
+
+// Update UI after payment - Use data from backend response
+function updateUIAfterPayment(paymentDetails) {
+  console.log('Updating UI with payment details:', paymentDetails);
+  
+  // 1. Update Financial Overview stats
+  updateFinancialStats(paymentDetails);
+  
+  // 2. Update the specific row in billing table
+  updateBillingRow(paymentDetails.appointmentId, paymentDetails.patientName, paymentDetails.amountPaid);
+  
+  // 3. Update the specific row in payments table  
+  updatePaymentsRow(paymentDetails.appointmentId, paymentDetails.patientName, paymentDetails.amountPaid);
+  
+  // 4. Add to recent payments
+  addToRecentPayments(paymentDetails);
+}
+
+// Update only the financial stats
+function updateFinancialStats(paymentDetails) {
+  // Update Pending Payments
+  const pendingElement = document.getElementById('pendingPayments');
+  if (pendingElement) {
+    const currentText = pendingElement.textContent;
+    const currentAmount = parseFloat(currentText.replace(/[^0-9.]/g, '') || 0);
+    const newAmount = paymentDetails.newPendingAmount || Math.max(0, currentAmount - paymentDetails.amountPaid);
+    pendingElement.textContent = `KSh ${newAmount.toLocaleString()}`;
+  }
+  
+  // Update Total Revenue
+  const revenueElement = document.getElementById('totalRevenue');
+  if (revenueElement) {
+    const currentText = revenueElement.textContent;
+    const currentAmount = parseFloat(currentText.replace(/[^0-9.]/g, '') || 0);
+    const newAmount = currentAmount + paymentDetails.amountPaid;
+    revenueElement.textContent = `KSh ${newAmount.toLocaleString()}`;
+  }
+}
+
+// Update specific billing row
+function updateBillingRow(appointmentId, patientName, amount) {
+  const rows = document.querySelectorAll('#billingTable tbody tr');
+  let rowUpdated = false;
+  
+  rows.forEach(row => {
+    const firstCell = row.querySelector('td:first-child');
+    if (firstCell && firstCell.textContent.includes(appointmentId.toString())) {
+      // Update status
+      const statusCell = row.querySelector('td:nth-child(7)');
+      if (statusCell) {
+        statusCell.innerHTML = '<span class="badge paid">PAID</span>';
+      }
+      
+      // Update actions
+      const actionsCell = row.querySelector('td:nth-child(8)');
+      if (actionsCell) {
+        actionsCell.innerHTML = `
+          <div class="action-buttons">
+            <button class="btn-info" onclick="viewBillDetails(${appointmentId}, '${patientName}', ${amount}, 'paid')">
+              <i class="fas fa-eye"></i> View
+            </button>
+            <button class="btn-secondary" disabled>
+              <i class="fas fa-check"></i> Paid
+            </button>
+          </div>
+        `;
+      }
+      rowUpdated = true;
+    }
+  });
+  
+  if (!rowUpdated) {
+    console.log(`Row for appointment ${appointmentId} not found in billing table`);
+  }
+}
+
+// Update specific payments row
+function updatePaymentsRow(appointmentId, patientName, amount) {
+  const rows = document.querySelectorAll('#paymentsTable tbody tr');
+  let rowUpdated = false;
+  
+  rows.forEach(row => {
+    // Check if this row contains the appointment ID
+    const cells = row.querySelectorAll('td');
+    cells.forEach(cell => {
+      if (cell.textContent.includes(appointmentId.toString())) {
+        // Update status (usually 6th column)
+        const statusCell = row.querySelector('td:nth-child(6)');
+        if (statusCell) {
+          statusCell.innerHTML = '<span class="badge paid">PAID</span>';
+        }
+        
+        // Update actions (usually 7th column)
+        const actionsCell = row.querySelector('td:nth-child(7)');
+        if (actionsCell) {
+          actionsCell.innerHTML = `
+            <div class="action-buttons">
+              <button class="btn-info" onclick="viewPaymentDetails(${appointmentId}, '${patientName}', ${amount}, 'paid')">
+                <i class="fas fa-eye"></i> Details
+              </button>
+            </div>
+          `;
+        }
+        rowUpdated = true;
+      }
+    });
+  });
+  
+  if (!rowUpdated) {
+    console.log(`Row for appointment ${appointmentId} not found in payments table`);
+  }
+}
+
+// Add to recent payments
+function addToRecentPayments(paymentDetails) {
+  const tbody = document.querySelector('#recentPaymentsTable tbody');
+  if (!tbody) return;
+  
+  // Remove any existing "loading" row
+  const loadingRow = tbody.querySelector('.loading');
+  if (loadingRow) {
+    loadingRow.remove();
+  }
+  
+  // Create new row
+  const newRow = document.createElement('tr');
+  newRow.innerHTML = `
+    <td>${paymentDetails.patientName}</td>
+    <td>Cash Payment</td>
+    <td>KSh ${paymentDetails.amountPaid.toLocaleString()}</td>
+    <td>${new Date().toLocaleDateString()}</td>
+    <td><span class="badge paid">paid</span></td>
+  `;
+  
+  // Add to top
+  if (tbody.firstChild) {
+    tbody.insertBefore(newRow, tbody.firstChild);
+  } else {
+    tbody.appendChild(newRow);
+  }
+  
+  // Limit to 10 rows
+  const rows = tbody.querySelectorAll('tr');
+  if (rows.length > 10) {
+    tbody.removeChild(rows[rows.length - 1]);
+  }
+}
+// Function for IMMEDIATE dashboard updates
+function updateDashboardImmediately(paymentDetails) {
+  console.log('Updating dashboard immediately with:', paymentDetails);
+  
+  // 1. Update Pending Payments amount (Financial Overview)
+  const pendingElement = document.getElementById('pendingPayments');
+  if (pendingElement) {
+    const currentText = pendingElement.textContent;
+    const currentAmount = parseFloat(currentText.replace(/[^0-9.]/g, '') || 0);
+    const newAmount = Math.max(0, currentAmount - paymentDetails.amountPaid);
+    pendingElement.textContent = `KSh ${newAmount.toLocaleString()}`;
+    console.log(`Pending updated: ${currentAmount} -> ${newAmount}`);
+  }
+  
+  // 2. Update Total Revenue (Financial Overview)
+  const revenueElement = document.getElementById('totalRevenue');
+  if (revenueElement) {
+    const currentText = revenueElement.textContent;
+    const currentAmount = parseFloat(currentText.replace(/[^0-9.]/g, '') || 0);
+    const newAmount = currentAmount + paymentDetails.amountPaid;
+    revenueElement.textContent = `KSh ${newAmount.toLocaleString()}`;
+    console.log(`Revenue updated: ${currentAmount} -> ${newAmount}`);
+  }
+  
+  // 3. Update Recent Payments table
+  updateRecentPaymentsTable(paymentDetails);
+  
+  // 4. Update Billing table status
+  updateBillingTableStatus(paymentDetails.appointmentId, paymentDetails.patientName, paymentDetails.amountPaid);
+  
+  // 5. Update Payments table status
+  updatePaymentsTableStatus(paymentDetails.appointmentId, paymentDetails.patientName, paymentDetails.amountPaid);
+  
+  // 6. Update Monthly/Yearly Revenue
+  updateFinancialReports();
+}
+
+// Update Recent Payments Table
+function updateRecentPaymentsTable(paymentDetails) {
+  const tbody = document.querySelector('#recentPaymentsTable tbody');
+  if (!tbody) return;
+  
+  // Create new row for the payment
+  const newRow = document.createElement('tr');
+  newRow.innerHTML = `
+    <td>${paymentDetails.patientName}</td>
+    <td>Cash Payment</td>
+    <td>KSh ${paymentDetails.amountPaid.toLocaleString()}</td>
+    <td>${new Date().toLocaleDateString()}</td>
+    <td><span class="badge paid">PAID</span></td>
+  `;
+  
+  // Insert at the top
+  if (tbody.firstChild) {
+    tbody.insertBefore(newRow, tbody.firstChild);
+  } else {
+    tbody.appendChild(newRow);
+  }
+  
+  // Keep only 10 rows
+  const rows = tbody.querySelectorAll('tr');
+  if (rows.length > 10) {
+    for (let i = 10; i < rows.length; i++) {
+      tbody.removeChild(rows[i]);
+    }
+  }
+}
+
+// Update Billing Table Status
+function updateBillingTableStatus(appointmentId, patientName, amount) {
+  const rows = document.querySelectorAll('#billingTable tbody tr');
+  rows.forEach(row => {
+    const firstCell = row.querySelector('td:first-child');
+    if (firstCell && firstCell.textContent.includes(appointmentId.toString())) {
+      // Update status cell (7th td)
+      const statusCell = row.querySelector('td:nth-child(7)');
+      if (statusCell) {
+        statusCell.innerHTML = '<span class="badge paid">PAID</span>';
+      }
+      
+      // Update actions cell (8th td)
+      const actionsCell = row.querySelector('td:nth-child(8)');
+      if (actionsCell) {
+        actionsCell.innerHTML = `
+          <div class="action-buttons">
+            <button class="btn-info" onclick="viewBillDetails(${appointmentId}, '${patientName}', ${amount}, 'paid')">
+              <i class="fas fa-eye"></i> View
+            </button>
+            <button class="btn-secondary" disabled>
+              <i class="fas fa-check"></i> Paid
+            </button>
+          </div>
+        `;
+      }
+    }
+  });
+}
+
+// Update Payments Table Status
+function updatePaymentsTableStatus(appointmentId, patientName, amount) {
+  const rows = document.querySelectorAll('#paymentsTable tbody tr');
+  rows.forEach(row => {
+    const thirdCell = row.querySelector('td:nth-child(3)');
+    if (thirdCell && thirdCell.textContent.includes(appointmentId.toString())) {
+      // Update status cell (6th td)
+      const statusCell = row.querySelector('td:nth-child(6)');
+      if (statusCell) {
+        statusCell.innerHTML = '<span class="badge paid">PAID</span>';
+      }
+      
+      // Update actions cell (7th td)
+      const actionsCell = row.querySelector('td:nth-child(7)');
+      if (actionsCell) {
+        actionsCell.innerHTML = `
+          <div class="action-buttons">
+            <button class="btn-info" onclick="viewPaymentDetails(${appointmentId}, '${patientName}', ${amount}, 'paid')">
+              <i class="fas fa-eye"></i> Details
+            </button>
+          </div>
+        `;
+      }
+    }
+  });
+}
+
+// Update Financial Reports
+function updateFinancialReports() {
+  const monthlyElement = document.getElementById('monthlyRevenue');
+  const yearlyElement = document.getElementById('yearlyRevenue');
+  
+  // These would need API calls to update accurately
+  // For now, we'll just reload them
+  setTimeout(() => {
+    loadReportsData();
+  }, 1000);
+}
+
+// Helper function for showMessage with timeout return
+function showMessage(text, type = 'info', timeout = 4000) {
+  const box = document.getElementById('messageBox');
+  const title = document.getElementById('messageTitle');
+  const content = document.getElementById('messageContent');
+
+  if (!box) return null;
+
+  title.textContent = type === 'success' ? 'Success' : 
+                     type === 'error' ? 'Error' : 
+                     type === 'warning' ? 'Warning' : 'Info';
+  content.textContent = text;
+
+  box.style.display = 'block';
+  box.className = `message-box ${type}`;
+
+  if (timeout > 0) {
+    return setTimeout(() => {
+      box.style.display = 'none';
+    }, timeout);
+  }
+  return null;
+}
+
+function clearTimeout(id) {
+  if (id) window.clearTimeout(id);
+}
+// Function to update dashboard immediately after payment
+function updateDashboardAfterPayment(appointmentId, patientName, amountPaid) {
+  // 1. Update pending amount display immediately
+  const pendingElement = document.getElementById('pendingPayments');
+  if (pendingElement) {
+    const currentPending = parseFloat(pendingElement.textContent.replace(/[^0-9.]/g, '') || 0);
+    const newPending = Math.max(0, currentPending - amountPaid);
+    pendingElement.textContent = `KSh ${newPending.toLocaleString()}`;
+  }
+  
+  // 2. Update recent payments table immediately
+  const recentPaymentsTable = document.querySelector('#recentPaymentsTable tbody');
+  if (recentPaymentsTable) {
+    // Add new payment at the top
+    const newRow = `
+      <tr>
+        <td>${patientName}</td>
+        <td>Payment</td>
+        <td>KSh ${amountPaid.toLocaleString()}</td>
+        <td>${new Date().toLocaleDateString()}</td>
+        <td><span class="badge paid">paid</span></td>
+      </tr>
+    `;
+    
+    const existingRows = recentPaymentsTable.innerHTML;
+    recentPaymentsTable.innerHTML = newRow + existingRows;
+  }
+  
+  // 3. Update billing table status for this appointment
+  const billingRows = document.querySelectorAll('#billingTable tbody tr');
+  billingRows.forEach(row => {
+    const cells = row.querySelectorAll('td');
+    if (cells.length > 0 && cells[0].textContent.includes(appointmentId)) {
+      // Update status cell
+      if (cells[6]) {
+        cells[6].innerHTML = '<span class="badge paid">PAID</span>';
+      }
+      // Update actions cell
+      if (cells[7]) {
+        cells[7].innerHTML = `
+          <div class="action-buttons">
+            <button class="btn-info" onclick="viewBillDetails(${appointmentId}, '${patientName}', ${amountPaid}, 'paid')">
+              <i class="fas fa-eye"></i> View
+            </button>
+            <button class="btn-secondary" disabled>
+              <i class="fas fa-check"></i> Paid
+            </button>
+          </div>
+        `;
+      }
+    }
+  });
+  
+  // 4. Update payments table
+  const paymentsRows = document.querySelectorAll('#paymentsTable tbody tr');
+  paymentsRows.forEach(row => {
+    const cells = row.querySelectorAll('td');
+    if (cells.length > 0 && cells[2].textContent.includes(appointmentId)) {
+      // Update status
+      if (cells[5]) {
+        cells[5].innerHTML = '<span class="badge paid">PAID</span>';
+      }
+      // Update actions
+      if (cells[6]) {
+        cells[6].innerHTML = `
+          <div class="action-buttons">
+            <button class="btn-info" onclick="viewPaymentDetails(${appointmentId}, '${patientName}', ${amountPaid}, 'paid')">
+              <i class="fas fa-eye"></i> Details
+            </button>
+          </div>
+        `;
+      }
+    }
+  });
+}
+// Close modal when clicking outside
+window.onclick = function(event) {
+  if (event.target === modal) {
+    closeModal();
+  }
+};
+
+// Check URL hash on page load
+document.addEventListener('DOMContentLoaded', function() {
+  // Load all data
+  loadDashboardData();
+  loadBillingData();
+  loadPaymentsData();
+  loadReportsData();
+  
+  // Check if there's a hash in the URL
+  const hash = window.location.hash.substring(1);
+  if (hash && ['overview', 'billing', 'payments', 'reports'].includes(hash)) {
+    // Find and click the corresponding nav button
+    const navButton = document.querySelector(`nav button[onclick*="${hash}"]`);
+    if (navButton) {
+      setTimeout(() => {
+        navButton.click();
+      }, 500);
+    }
+  }
+});
+
+    </script> 
+    
+</body>
+</html>

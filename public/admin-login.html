@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link rel="icon" type="image/x-icon" href="favicon.png">
+  <title>Admin Login - Medicare System</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #1e2a78;
+      --primary-light: #2a387f;
+      --primary-dark: #151e5a;
+      --secondary: #34a853;
+      --danger: #ea4335;
+      --warning: #fbbc05;
+      --light: #f8f9fa;
+      --dark: #202124;
+      --gray: #5f6368;
+      --light-gray: #dadce0;
+      --border-radius: 12px;
+      --box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+      --transition: all 0.3s ease;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      color: var(--dark);
+      padding: 20px;
+    }
+
+    .login-container {
+      background-color: #fff;
+      padding: 50px 40px;
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      width: 100%;
+      max-width: 450px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .login-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background: linear-gradient(to right, var(--primary), var(--primary-light));
+    }
+
+    .logo {
+      margin-bottom: 30px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .logo i {
+      font-size: 36px;
+      color: var(--primary);
+    }
+
+    .logo h1 {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .login-container h2 {
+      margin-bottom: 30px;
+      color: var(--dark);
+      font-weight: 600;
+      font-size: 28px;
+    }
+
+    .input-group {
+      position: relative;
+      margin-bottom: 20px;
+      text-align: left;
+    }
+
+    .input-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: var(--gray);
+      font-size: 14px;
+    }
+
+    .input-group input {
+      width: 100%;
+      padding: 16px 20px 16px 50px;
+      border-radius: 8px;
+      border: 1px solid var(--light-gray);
+      font-size: 16px;
+      font-family: 'Inter', sans-serif;
+      transition: var(--transition);
+      background-color: #fafafa;
+    }
+
+    .input-group input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(30, 42, 120, 0.1);
+      background-color: #fff;
+    }
+
+    .input-icon {
+      position: absolute;
+      left: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--gray);
+      font-size: 18px;
+    }
+
+    .login-container button {
+      width: 100%;
+      padding: 16px;
+      margin-top: 25px;
+      background: linear-gradient(to right, var(--primary), var(--primary-light));
+      border: none;
+      color: #fff;
+      font-size: 16px;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 4px 12px rgba(30, 42, 120, 0.3);
+    }
+
+    .login-container button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(30, 42, 120, 0.4);
+    }
+
+    .login-container button:active {
+      transform: translateY(0);
+    }
+
+    .error-message {
+      color: var(--danger);
+      margin-top: 15px;
+      display: none;
+      font-size: 14px;
+      font-weight: 500;
+      padding: 12px 15px;
+      background-color: rgba(234, 67, 53, 0.1);
+      border-radius: 6px;
+      border-left: 4px solid var(--danger);
+      text-align: left;
+    }
+
+    .success-message {
+      color: var(--secondary);
+      margin-top: 15px;
+      display: none;
+      font-size: 14px;
+      font-weight: 500;
+      padding: 12px 15px;
+      background-color: rgba(52, 168, 83, 0.1);
+      border-radius: 6px;
+      border-left: 4px solid var(--secondary);
+      text-align: left;
+    }
+
+    .forgot-password {
+      margin-top: 20px;
+      text-align: right;
+    }
+
+    .forgot-password a {
+      color: var(--primary);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: var(--transition);
+    }
+
+    .forgot-password a:hover {
+      text-decoration: underline;
+    }
+
+    .loading {
+      display: none;
+      width: 20px;
+      height: 20px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-radius: 50%;
+      border-top: 2px solid #fff;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .footer {
+      margin-top: 30px;
+      color: var(--gray);
+      font-size: 13px;
+      padding-top: 20px;
+      border-top: 1px solid var(--light-gray);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 480px) {
+      .login-container {
+        padding: 40px 25px;
+      }
+      
+      .logo h1 {
+        font-size: 22px;
+      }
+      
+      .login-container h2 {
+        font-size: 24px;
+      }
+      
+      .input-group input {
+        padding: 14px 15px 14px 45px;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .login-container {
+        padding: 30px 20px;
+      }
+      
+      .logo {
+        flex-direction: column;
+        gap: 10px;
+      }
+      
+      .logo h1 {
+        font-size: 20px;
+      }
+    }
+
+    /* Animation for error message */
+    @keyframes shake {
+      0%, 100% {transform: translateX(0);}
+      10%, 30%, 50%, 70%, 90% {transform: translateX(-5px);}
+      20%, 40%, 60%, 80% {transform: translateX(5px);}
+    }
+
+    .shake {
+      animation: shake 0.5s;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="login-container">
+    <div class="logo">
+      <i class="fas fa-hospital-alt"></i>
+      <h1>Medicare System</h1>
+    </div>
+    
+    <h2>Admin Login</h2>
+    
+    <div class="input-group">
+      <label for="email">Email Address</label>
+      <i class="fas fa-envelope input-icon"></i>
+      <input type="email" id="email" placeholder="Enter your email" required>
+    </div>
+    
+    <div class="input-group">
+      <label for="password">Password</label>
+      <i class="fas fa-lock input-icon"></i>
+      <input type="password" id="password" placeholder="Enter your password" required>
+    </div>
+    
+    <div class="forgot-password">
+      <a href="#" id="forgotPassword">Forgot Password?</a>
+    </div>
+    
+    <button id="loginBtn">
+      <span id="btnText">Login to Dashboard</span>
+      <div class="loading" id="loadingSpinner"></div>
+    </button>
+    
+    <div class="error-message" id="errorMsg"></div>
+    <div class="success-message" id="successMsg"></div>
+    
+    <div class="footer">
+      <p>Secure Admin Access &copy; 2023 Medicare System</p>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const loginBtn = document.getElementById("loginBtn");
+      const errorMsg = document.getElementById("errorMsg");
+      const successMsg = document.getElementById("successMsg");
+      const btnText = document.getElementById("btnText");
+      const loadingSpinner = document.getElementById("loadingSpinner");
+      const forgotPassword = document.getElementById("forgotPassword");
+
+      // Login function
+      loginBtn.addEventListener("click", async () => {
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value;
+
+        // Input validation
+        if (!email || !password) {
+          showError("Please enter both email and password");
+          return;
+        }
+
+        if (!isValidEmail(email)) {
+          showError("Please enter a valid email address");
+          return;
+        }
+
+        // Show loading state
+        btnText.textContent = "Authenticating...";
+        loadingSpinner.style.display = "block";
+        loginBtn.disabled = true;
+
+        try {
+          const res = await fetch("/admin/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, password })
+          });
+
+          const data = await res.json();
+          console.log(data); // Debug: check what backend returns
+
+          if (data.status === "success") {
+            showSuccess("Login successful! Redirecting...");
+            setTimeout(() => {
+              window.location.href = "/admin-dashboard.html";
+            }, 1000);
+          } else {
+            showError(data.message || "Login failed. Please check your credentials.");
+          }
+        } catch (err) {
+          console.error(err);
+          showError("Server error. Please try again.");
+        } finally {
+          // Reset button state
+          btnText.textContent = "Login to Dashboard";
+          loadingSpinner.style.display = "none";
+          loginBtn.disabled = false;
+        }
+      });
+
+      // Forgot password handler
+      forgotPassword.addEventListener("click", (e) => {
+        e.preventDefault();
+        showError("Please contact system administrator to reset your password.");
+      });
+
+      // Enter key support
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          loginBtn.click();
+        }
+      });
+
+      // Helper functions
+      function showError(message) {
+        errorMsg.textContent = message;
+        errorMsg.style.display = "block";
+        successMsg.style.display = "none";
+        errorMsg.classList.add("shake");
+        setTimeout(() => errorMsg.classList.remove("shake"), 500);
+      }
+
+      function showSuccess(message) {
+        successMsg.textContent = message;
+        successMsg.style.display = "block";
+        errorMsg.style.display = "none";
+      }
+
+      function isValidEmail(email) {
+        const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return re.test(String(email).toLowerCase());
+      }
+    });
+
+    // Session check function (for reference)
+    function isAdminLoggedIn(req, res, next) {
+      if (req.session.admin && req.session.admin.role === 'superadmin') {
+        next(); // session exists, allow access
+      } else {
+        res.redirect('/admin-login.html'); // redirect to login page
+      }
+    }
+
+    // Route protection (for reference)
+    // app.get('/admin-dashboard.html', isAdminLoggedIn, (req, res) => {
+    //   res.sendFile(__dirname + '/admin.html'); // serve dashboard only if logged in
+    // });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,1218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link rel="icon" type="image/x-icon" href="favicon.png">
+<title>Admin Dashboard - Medicare System</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+  :root {
+    --primary: #1e2a78;
+    --primary-light: #2a387f;
+    --primary-dark: #151e5a;
+    --secondary: #34a853;
+    --danger: #ea4335;
+    --warning: #fbbc05;
+    --info: #1a73e8;
+    --light: #f8f9fa;
+    --dark: #202124;
+    --gray: #5f6368;
+    --light-gray: #dadce0;
+    --border-radius: 10px;
+    --box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    --transition: all 0.3s ease;
+  }
+  
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body { 
+    font-family: 'Inter', sans-serif; 
+    margin: 0; 
+    background: #f5f7fa; 
+    color: var(--dark); 
+    line-height: 1.6;
+  }
+  
+  /* Header Styles */
+  header { 
+    background: var(--primary); 
+    color: #fff; 
+    padding: 18px 30px; 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  
+  .header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+  
+  header h1 { 
+    margin: 0; 
+    font-size: 24px; 
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  header h1 i {
+    font-size: 26px;
+  }
+  
+  header button { 
+    background: rgba(255,255,255,0.15); 
+    color: #fff; 
+    border: 1px solid rgba(255,255,255,0.2);
+    padding: 10px 20px; 
+    border-radius: 8px; 
+    cursor: pointer; 
+    font-weight: 500;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  header button:hover { 
+    background: rgba(255,255,255,0.25); 
+    transform: translateY(-2px);
+  }
+  
+  /* Navigation */
+  nav { 
+    display: flex; 
+    justify-content: flex-start;
+    background: var(--primary-light); 
+    padding: 0;
+    overflow-x: auto;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  }
+  
+  nav button { 
+    background: transparent; 
+    border: none; 
+    padding: 16px 24px; 
+    color: rgba(255,255,255,0.85);
+    cursor: pointer; 
+    font-weight: 500; 
+    transition: var(--transition);
+    border-bottom: 3px solid transparent;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  nav button:hover { 
+    background: rgba(255,255,255,0.1); 
+    color: #fff;
+  }
+  
+  nav button.active {
+    color: #fff;
+    border-bottom: 3px solid #fff;
+    background: rgba(255,255,255,0.1);
+  }
+  
+  /* Container */
+  .container { 
+    padding: 30px; 
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  
+  h2 { 
+    margin-top: 0; 
+    margin-bottom: 20px;
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--dark);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  /* Table Styles */
+  .table-wrapper {
+    background: #fff;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    box-shadow: var(--box-shadow);
+    margin-bottom: 30px;
+    overflow-x: auto;
+  }
+  
+  table { 
+    width: 100%; 
+    border-collapse: collapse; 
+    min-width: 800px;
+  }
+  
+  th, td { 
+    padding: 16px; 
+    text-align: left; 
+    border-bottom: 1px solid #f0f0f0; 
+  }
+  
+  th { 
+    background: var(--primary); 
+    color: white; 
+    position: sticky; 
+    top: 0; 
+    font-weight: 600;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  tr:hover { 
+    background: #f8f9fa; 
+  }
+  
+  .hidden { 
+    display: none; 
+  }
+  
+  /* Badge Styles */
+  .badge { 
+    padding: 6px 12px; 
+    border-radius: 20px; 
+    color: #fff; 
+    font-size: 12px; 
+    font-weight: 500; 
+    display: inline-block;
+    text-align: center;
+    min-width: 80px;
+  }
+  
+  .completed { 
+    background: var(--secondary); 
+  } 
+  
+  .pending { 
+    background: var(--warning); 
+    color: #000; 
+  } 
+  
+  .cancelled { 
+    background: var(--danger); 
+  }
+  
+  /* Modal */
+  .modal { 
+    display: none; 
+    position: fixed; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%; 
+    background: rgba(0,0,0,0.5); 
+    justify-content: center; 
+    align-items: center; 
+    z-index: 1000; 
+    backdrop-filter: blur(5px);
+  }
+  
+  .modal-content { 
+    background: #fff; 
+    padding: 30px; 
+    border-radius: 12px; 
+    width: 95%; 
+    max-width: 1200px; 
+    max-height: 90%; 
+    overflow: auto; 
+    position: relative;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  }
+  
+  .close-btn { 
+    position: absolute; 
+    top: 20px; 
+    right: 20px; 
+    font-size: 24px; 
+    cursor: pointer; 
+    color: var(--gray);
+    transition: var(--transition);
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+  }
+  
+  .close-btn:hover {
+    background: #f5f5f5;
+    color: var(--dark);
+  }
+  
+  input[type="text"], select { 
+    width: 100%; 
+    padding: 10px 12px; 
+    border-radius: 6px; 
+    border: 1px solid #ddd; 
+    font-family: 'Inter', sans-serif;
+    transition: var(--transition);
+  }
+  
+  input[type="text"]:focus, select:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(30, 42, 120, 0.1);
+  }
+  
+  button.save-btn { 
+    background: var(--primary); 
+    color: #fff; 
+    border: none; 
+    padding: 10px 18px; 
+    border-radius: 6px; 
+    cursor: pointer; 
+    font-weight: 500;
+    transition: var(--transition);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'Inter', sans-serif;
+  }
+  
+  button.save-btn:hover { 
+    background: var(--primary-dark); 
+    transform: translateY(-2px);
+  }
+  
+  button.delete-btn {
+    background: var(--danger);
+  }
+  
+  button.delete-btn:hover {
+    background: #c23321;
+  }
+  
+  .action-buttons {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  
+  /* Stats Cards */
+  .stats-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+  }
+  
+  .stat-card {
+    background: #fff;
+    border-radius: var(--border-radius);
+    padding: 24px;
+    box-shadow: var(--box-shadow);
+    transition: var(--transition);
+    border-left: 4px solid var(--primary);
+  }
+  
+  .stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+  }
+  
+  .stat-card i {
+    font-size: 28px;
+    color: var(--primary);
+    margin-bottom: 15px;
+  }
+  
+  .stat-value {
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 5px;
+    color: var(--dark);
+  }
+  
+  .stat-label {
+    font-size: 14px;
+    color: var(--gray);
+    font-weight: 500;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 1024px) {
+    .container {
+      padding: 20px;
+    }
+    
+    .stats-container {
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    }
+  }
+  
+  @media (max-width: 768px) {
+    header {
+      padding: 15px 20px;
+      flex-direction: column;
+      gap: 15px;
+      align-items: flex-start;
+    }
+    
+    .header-content {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 15px;
+    }
+    
+    nav {
+      justify-content: flex-start;
+    }
+    
+    nav button {
+      padding: 14px 18px;
+      font-size: 14px;
+    }
+    
+    .container {
+      padding: 15px;
+    }
+    
+    .stats-container {
+      grid-template-columns: 1fr 1fr;
+    }
+    
+    th, td {
+      padding: 12px 10px;
+    }
+  }
+  
+  @media (max-width: 576px) {
+    header h1 {
+      font-size: 20px;
+    }
+    
+    nav button {
+      padding: 12px 14px;
+      font-size: 13px;
+    }
+    
+    .stats-container {
+      grid-template-columns: 1fr;
+    }
+    
+    .stat-card {
+      padding: 20px;
+    }
+    
+    .stat-value {
+      font-size: 28px;
+    }
+    
+    .action-buttons {
+      flex-direction: column;
+    }
+    
+    .modal-content {
+      padding: 20px;
+      width: 98%;
+    }
+  }
+  
+  /* Loading Animation */
+  @keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+  }
+  
+  .loading {
+    animation: pulse 1.5s infinite;
+    text-align: center;
+    padding: 20px;
+    color: var(--gray);
+  }
+  
+  /* Empty State */
+  .empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--gray);
+  }
+  
+  .empty-state i {
+    font-size: 48px;
+    margin-bottom: 15px;
+    opacity: 0.5;
+  }
+  
+  /* Message Box Styles */
+  .message-box {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    padding: 15px 20px;
+    max-width: 300px;
+    z-index: 1000;
+    transform: translateX(150%);
+    transition: transform 0.3s ease;
+    border-left: 4px solid var(--primary);
+  }
+  
+  .message-box.show {
+    transform: translateX(0);
+  }
+  
+  .message-box.success {
+    border-left-color: var(--secondary);
+  }
+  
+  .message-box.warning {
+    border-left-color: var(--warning);
+  }
+  
+  .message-box.error {
+    border-left-color: var(--danger);
+  }
+  
+  .message-box.info {
+    border-left-color: var(--info);
+  }
+  
+  .message-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
+  }
+  
+  .message-title {
+    font-weight: bold;
+    font-size: 16px;
+  }
+  
+  .message-close {
+    background: none;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    color: var(--gray);
+  }
+  
+  .message-content {
+    font-size: 14px;
+    color: var(--dark);
+  }
+  
+  /* Reload Indicator */
+  .reload-indicator {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: var(--primary);
+    z-index: 1001;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.5s ease;
+  }
+  
+  .reload-indicator.active {
+    transform: scaleX(1);
+  }
+  
+  /* Slide-in animation for sections */
+  section {
+    transform: translateX(-100%);
+    opacity: 0;
+    transition: transform 0.5s ease, opacity 0.5s ease;
+  }
+  
+  section.visible {
+    transform: translateX(0);
+    opacity: 1;
+  }
+</style>
+</head>
+<body>
+
+<!-- Reload Indicator -->
+<div class="reload-indicator" id="reloadIndicator"></div>
+
+<!-- Message Box -->
+<div class="message-box info" id="messageBox">
+  <div class="message-header">
+    <div class="message-title">Information</div>
+    <button class="message-close" id="closeMessage">&times;</button>
+  </div>
+  <div class="message-content" id="messageContent">This is a message</div>
+</div>
+
+<header>
+  <div class="header-content">
+    <h1><i class="fas fa-hospital-alt"></i> Medicare Admin Dashboard</h1>
+    <button onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+  </div>
+</header>
+
+<nav>
+  <button class="active" onclick="showSection('doctors')"><i class="fas fa-user-md"></i> Doctors</button>
+  <button onclick="showSection('patients')"><i class="fas fa-user-injured"></i> Patients</button>
+  <button onclick="showSection('appointments')"><i class="fas fa-calendar-check"></i> Appointments</button>
+  <button onclick="showSection('accountants')"><i class="fas fa-calculator"></i> Accountants</button>
+  <button onclick="showSection('pendingDoctors')"><i class="fas fa-clock"></i> Pending Doctors</button>
+</nav>
+
+<div class="container">
+  <!-- Stats Overview -->
+  <div class="stats-container">
+    <div class="stat-card">
+      <i class="fas fa-user-md"></i>
+      <div class="stat-value" id="doctorsCount">0</div>
+      <div class="stat-label">Total Doctors</div>
+    </div>
+    <div class="stat-card">
+      <i class="fas fa-user-injured"></i>
+      <div class="stat-value" id="patientsCount">0</div>
+      <div class="stat-label">Total Patients</div>
+    </div>
+    <div class="stat-card">
+      <i class="fas fa-calendar-check"></i>
+      <div class="stat-value" id="appointmentsCount">0</div>
+      <div class="stat-label">Total Appointments</div>
+    </div>
+    <div class="stat-card">
+      <i class="fas fa-calculator"></i>
+      <div class="stat-value" id="accountantsCount">0</div>
+      <div class="stat-label">Total Accountants</div>
+    </div>
+  </div>
+
+  <!-- Doctors Section -->
+  <section id="doctors" class="visible">
+    <h2><i class="fas fa-user-md"></i> All Doctors</h2>
+    <div class="table-wrapper">
+      <table id="doctorsTable">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Full Name</th>
+            <th>Email</th>
+            <th>License Number</th>
+            <th>Specialization</th>
+            <th>Hospital</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Patients Section -->
+  <section id="patients" class="hidden">
+    <h2><i class="fas fa-user-injured"></i> All Patients</h2>
+    <div class="table-wrapper">
+      <table id="patientsTable">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Full Name</th>
+            <th>Email</th>
+            <th>Gender</th>
+            <th>DOB</th>
+            <th>Contact</th>
+            <th>Address</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Appointments Section -->
+  <section id="appointments" class="hidden">
+    <h2><i class="fas fa-calendar-check"></i> All Appointments</h2>
+    <div class="table-wrapper">
+      <table id="appointmentsTable">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Patient</th>
+            <th>Doctor</th>
+            <th>Time</th>
+            <th>Reason</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Accountants Section -->
+  <section id="accountants" class="hidden">
+    <h2><i class="fas fa-calculator"></i> All Accountants</h2>
+    <div class="table-wrapper">
+      <table id="accountantsTable">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Full Name</th>
+            <th>Email</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Pending Doctors Section -->
+  <section id="pendingDoctors" class="hidden">
+    <h2><i class="fas fa-clock"></i> Pending Doctor Approvals</h2>
+    <div class="table-wrapper">
+      <table id="pendingDoctorsTable">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Full Name</th>
+            <th>Email</th>
+            <th>License Number</th>
+            <th>Specialization</th>
+            <th>Hospital</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+</div>
+
+<!-- Appointment Modal -->
+<div id="appointmentsModal" class="modal">
+  <div class="modal-content">
+    <span class="close-btn" onclick="closeModal()">&times;</span>
+    <h3><i class="fas fa-calendar-alt"></i> Appointment Details</h3>
+    <div class="table-wrapper">
+      <table id="modalAppointmentsTable">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Patient</th>
+            <th>Doctor</th>
+            <th>Time</th>
+            <th>Reason</th>
+            <th>Status</th>
+            <th>Prescription</th>
+            <th>Billing</th>
+            <th>Report</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<script>
+const API_BASE = ''; // Set your API base URL
+let modal = document.getElementById('appointmentsModal');
+let modalTableBody = document.querySelector('#modalAppointmentsTable tbody');
+
+// ------------------ Auto-reload on First Visit ------------------
+document.addEventListener('DOMContentLoaded', () => {
+  const reloadIndicator = document.getElementById('reloadIndicator');
+  const isFirstVisit = !sessionStorage.getItem('dashboardVisited');
+
+  if (isFirstVisit) {
+    reloadIndicator.classList.add('active');
+    setTimeout(() => {
+      sessionStorage.setItem('dashboardVisited', 'true');
+      reloadIndicator.classList.remove('active');
+      showMessage('Dashboard data refreshed successfully!', 'success');
+      showSection('doctors');
+    }, 1500);
+  } else {
+    showSection('doctors');
+  }
+
+  // Close message box
+  document.getElementById('closeMessage')?.addEventListener('click', () => {
+    document.getElementById('messageBox').classList.remove('show');
+  });
+});
+
+// ------------------ Show Section ------------------
+function showSection(sectionId, event = null){
+  // Update active nav button
+  document.querySelectorAll('nav button').forEach(btn => btn.classList.remove('active'));
+  if(event) event.target.classList.add('active');
+
+  // Show/hide sections with animation
+  document.querySelectorAll('section').forEach(sec => {
+    sec.classList.add('hidden');
+    sec.classList.remove('visible');
+  });
+  const targetSection = document.getElementById(sectionId);
+  targetSection.classList.remove('hidden');
+  setTimeout(() => targetSection.classList.add('visible'), 10);
+
+  loadSection(sectionId);
+}
+
+// ------------------ Load Data for Section ------------------
+async function loadSection(section){
+  let url = '', tableBody;
+  switch(section){
+    case 'doctors': url='/admin/doctors'; tableBody=document.querySelector('#doctorsTable tbody'); break;
+    case 'patients': url='/admin/patients'; tableBody=document.querySelector('#patientsTable tbody'); break;
+    case 'appointments': url='/admin/appointments'; tableBody=document.querySelector('#appointmentsTable tbody'); break;
+    case 'accountants': url='/admin/accountants'; tableBody=document.querySelector('#accountantsTable tbody'); break;
+    case 'pendingDoctors': url='/admin/doctors/pending'; tableBody=document.querySelector('#pendingDoctorsTable tbody'); break;
+    default: return;
+  }
+
+  tableBody.innerHTML = '<tr><td colspan="10" class="loading">Loading data...</td></tr>';
+
+  try{
+    const res = await fetch(url);
+    const data = await res.json();
+    tableBody.innerHTML = '';
+
+    if(data.length === 0){
+      tableBody.innerHTML = `
+        <tr>
+          <td colspan="10" class="empty-state">
+            <i class="fas fa-inbox"></i>
+            <div>No data available</div>
+          </td>
+        </tr>`;
+      return;
+    }
+
+    data.forEach(item => {
+      let row = document.createElement('tr');
+
+      switch(section){
+        case 'doctors':
+          row.innerHTML = `
+            <td>${item.id}</td>
+            <td>${item.full_name}</td>
+            <td>${item.email}</td>
+            <td>${item.license_number}</td>
+            <td>${item.specialization}</td>
+            <td>${item.hospital_name}</td>
+            <td>
+              <div class="action-buttons">
+                <button class="save-btn delete-btn" data-type="doctors" data-id="${item.id}">
+                  <i class="fas fa-trash"></i> Delete
+                </button>
+                <button class="save-btn view-btn" data-type="doctors" data-id="${item.id}">
+                  <i class="fas fa-eye"></i> View Appointments
+                </button>
+              </div>
+            </td>`;
+          break;
+
+        case 'patients':
+          row.innerHTML = `
+            <td>${item.id}</td>
+            <td>${item.full_name}</td>
+            <td>${item.email}</td>
+            <td>${item.gender}</td>
+            <td>${item.dob}</td>
+            <td>${item.contact_number}</td>
+            <td>${item.address}</td>
+            <td>
+              <div class="action-buttons">
+                <button class="save-btn delete-btn" data-type="patients" data-id="${item.id}">
+                  <i class="fas fa-trash"></i> Delete
+                </button>
+                <button class="save-btn view-btn" data-type="patients" data-id="${item.id}">
+                  <i class="fas fa-eye"></i> View Appointments
+                </button>
+              </div>
+            </td>`;
+          break;
+
+       case 'appointments':
+  const statusClass = item.status==='Completed'?'completed':item.status==='Pending'?'pending':'cancelled';
+  row.innerHTML = `
+    <td>${item.id}</td>
+    <td>${item.patient_name}</td>
+    <td>${item.doctor_name}</td>
+    <td>${item.appointment_time}</td>
+    <td>${item.reason}</td>
+    <td><span class="badge ${statusClass}">${item.status}</span></td>
+    <td>
+      <button class="save-btn delete-btn" data-type="appointments" data-id="${item.id}">
+        <i class="fas fa-trash"></i> Delete
+      </button>
+    </td>`;
+  break;
+
+        case 'accountants':
+          row.innerHTML = `
+            <td>${item.id}</td>
+            <td>${item.full_name}</td>
+            <td>${item.email}</td>
+            <td>
+<button onclick="deleteAppointment(appointment.id)">Delete</button>
+            </td>`;
+          break;
+
+        case 'pendingDoctors':
+          row.innerHTML = `
+            <td>${item.id}</td>
+            <td>${item.full_name}</td>
+            <td>${item.email}</td>
+            <td>${item.license_number}</td>
+            <td>${item.specialization}</td>
+            <td>${item.hospital_name}</td>
+            <td>
+              <div class="action-buttons">
+                <button class="save-btn approve-btn" data-id="${item.id}">
+                  <i class="fas fa-check"></i> Approve
+                </button>
+                <button class="save-btn delete-btn reject-btn" data-id="${item.id}">
+                  <i class="fas fa-times"></i> Reject
+                </button>
+              </div>
+            </td>`;
+          break;
+      }
+
+      tableBody.appendChild(row);
+    });
+
+    updateStats(section, data.length);
+  } catch(err){
+    console.error(err);
+    tableBody.innerHTML='<tr><td colspan="10" class="loading">Error loading data</td></tr>';
+  }
+}
+
+// ------------------ Update Stats ------------------
+function updateStats(section, count){
+  const map = {
+    doctors: 'doctorsCount',
+    patients: 'patientsCount',
+    appointments: 'appointmentsCount',
+    accountants: 'accountantsCount'
+  };
+  if(map[section]) document.getElementById(map[section]).textContent = count;
+}
+
+// ------------------ Delete Item ------------------
+async function deleteItem(type, id) {
+    console.log(`🔄 Deleting ${type} with ID: ${id}`);
+    
+    const urlMap = {
+        doctors: `/admin/delete-doctor/${id}`,
+        patients: `/admin/patients/${id}/delete`,
+        appointments: `/admin/appointments/${id}/delete`,
+        accountants: `/admin/accountants/${id}/delete`
+    };
+
+    const url = urlMap[type];
+    if (!url) {
+        console.error(`❌ Unknown type: ${type}`);
+        showMessage(`Unknown type: ${type}`, 'error');
+        return;
+    }
+
+    showMessage(`Are you sure you want to delete this ${type}? This action cannot be undone.`, 'warning', true, async () => {
+        try {
+            console.log(`📡 Sending DELETE request to: ${url}`);
+            const res = await fetch(url, { 
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            
+            const result = await res.json();
+            console.log(`📨 Response:`, result);
+
+            if (res.ok && result.status === 'success') {
+                showMessage(result.message || `${type.charAt(0).toUpperCase() + type.slice(1)} deleted successfully!`, 'success');
+                
+                // Refresh the current section and related sections
+                const currentSection = document.querySelector('section:not(.hidden)').id;
+                setTimeout(() => {
+                    loadSection(currentSection);
+                    // If deleting a doctor, also refresh pending doctors section
+                    if (type === 'doctors') {
+                        loadSection('pendingDoctors');
+                    }
+                }, 500);
+                
+            } else {
+                showMessage(`Delete failed: ${result.message || 'Unknown error'}`, 'error');
+            }
+        } catch (err) {
+            console.error(`❌ Error deleting ${type}:`, err);
+            showMessage(`Error deleting ${type}: ${err.message}`, 'error');
+        }
+    });
+}
+
+// ------------------ Approve/Reject Doctor ------------------
+async function approveDoctor(id, action){
+    const actionText = action === 'approve' ? 'approve' : 'reject';
+    
+    showMessage(`Are you sure you want to ${actionText} this doctor?`, 'warning', true, async () => {
+        try {
+            const endpoint = action === 'approve' ? 'approve' : 'reject';
+            const res = await fetch(`/admin/doctors/${id}/${endpoint}`, { 
+                method: 'POST' 
+            });
+            
+            const result = await res.json();
+            console.log(`📨 ${actionText} response:`, result);
+
+            if (res.ok && result.status === 'success') {
+                showMessage(`Doctor ${actionText}d successfully!`, 'success');
+                
+                // Refresh both pending doctors and doctors sections
+                setTimeout(() => {
+                    loadSection('pendingDoctors');
+                    loadSection('doctors');
+                }, 1000);
+                
+            } else {
+                showMessage(`Failed to ${actionText} doctor: ${result.message}`, 'error');
+            }
+        } catch (err) {
+            console.error(`❌ Error ${actionText}ing doctor:`, err);
+            showMessage(`Error ${actionText}ing doctor: ${err.message}`, 'error');
+        }
+    });
+}
+// ------------------ View Appointments ------------------
+async function viewAppointments(type, id){
+    const url = type === 'doctors' ? `/admin/doctor/${id}/appointments` : `/api/patient/${id}/appointments`;
+    modal.style.display = 'flex';
+    modalTableBody.innerHTML = '<tr><td colspan="10" class="loading">Loading appointments...</td></tr>';
+
+    try {
+        const res = await fetch(url);
+        
+        if (!res.ok) {
+            throw new Error(`HTTP error! status: ${res.status}`);
+        }
+        
+        const data = await res.json();
+        modalTableBody.innerHTML = '';
+
+        if (!data || data.length === 0) {
+            modalTableBody.innerHTML = `
+                <tr>
+                    <td colspan="10" class="empty-state">
+                        <i class="fas fa-inbox"></i>
+                        <div>No appointments found</div>
+                    </td>
+                </tr>`;
+            return;
+        }
+
+        data.forEach(a => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${a.appointment_id}</td>
+                <td>${a.patient_name || ''}</td>
+                <td>${a.doctor_name || ''}</td>
+                <td>${a.appointment_time}</td>
+                <td>${a.reason}</td>
+                <td>
+                    <select id="status-${a.appointment_id}">
+                        <option value="Pending" ${a.status === 'Pending' ? 'selected' : ''}>Pending</option>
+                        <option value="Completed" ${a.status === 'Completed' ? 'selected' : ''}>Completed</option>
+                        <option value="Cancelled" ${a.status === 'Cancelled' ? 'selected' : ''}>Cancelled</option>
+                    </select>
+                </td>
+                <td><input type="text" id="prescription-${a.appointment_id}" value="${a.prescription || ''}"></td>
+                <td><input type="text" id="billing-${a.appointment_id}" value="${a.billing || ''}"></td>
+                <td><input type="text" id="report-${a.appointment_id}" value="${a.report || ''}"></td>
+                <td>
+                    <button class="save-btn" onclick="updateAppointment(${a.appointment_id})">
+                        <i class="fas fa-save"></i> Save
+                    </button>
+                </td>`;
+            modalTableBody.appendChild(row);
+        });
+    } catch (err) {
+        console.error('Error loading appointments:', err);
+        modalTableBody.innerHTML = `
+            <tr>
+                <td colspan="10" class="loading" style="color: #ea4335;">
+                    <i class="fas fa-exclamation-triangle"></i><br>
+                    Error loading appointments<br>
+                    <small>${err.message}</small>
+                </td>
+            </tr>`;
+    }
+}
+function deleteAppointment(id) {
+    showMessage("Are you sure you want to delete this appointment?", 'warning', true, async () => {
+        try {
+            const res = await fetch(`/api/appointments/${id}`, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+            
+            const data = await res.json();
+            
+            if (data.success) {
+                showMessage("✔ " + data.message, 'success');
+                // Refresh the appointments section instead of full page reload
+                setTimeout(() => {
+                    loadSection('appointments');
+                }, 1000);
+            } else {
+                showMessage("❌ " + data.message, 'error');
+            }
+        } catch (err) {
+            console.error("Delete error:", err);
+            showMessage("❌ Failed to delete appointment. Server error.", 'error');
+        }
+    });
+}
+// ------------------ Update Appointment ------------------
+async function updateAppointment(id){
+    const status = document.getElementById(`status-${id}`).value;
+    const prescription = document.getElementById(`prescription-${id}`).value;
+    const billing = document.getElementById(`billing-${id}`).value;
+    const report = document.getElementById(`report-${id}`).value;
+
+    try {
+        const res = await fetch(`/api/appointments/${id}/update`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({status, prescription, billing, report})
+        });
+        
+        const result = await res.json();
+        
+        if (result.success) {
+            showMessage('Appointment updated successfully', 'success');
+            closeModal();
+            // Refresh appointments section
+            setTimeout(() => {
+                showSection('appointments');
+            }, 1000);
+        } else {
+            showMessage('Update failed: ' + (result.message || 'Unknown error'), 'error');
+        }
+    } catch (err) {
+        console.error('Error updating appointment:', err);
+        showMessage('Error updating appointment: ' + err.message, 'error');
+    }
+}
+// ------------------ Close Modal ------------------
+function closeModal(){ modal.style.display='none'; }
+modal.addEventListener('click', e => { if(e.target === modal) closeModal(); });
+// ------------------ Logout ------------------
+function logout(){ 
+    showMessage('Are you sure you want to logout?', 'warning', true, () => {
+        showMessage('Logging out...', 'info');
+        fetch('/admin/logout')
+            .then(() => {
+                setTimeout(() => {
+                    window.location.href = '/admin-login.html';
+                }, 1000);
+            })
+            .catch(err => {
+                console.error('Logout error:', err);
+                showMessage('Logout failed. Redirecting...', 'error');
+                setTimeout(() => {
+                    window.location.href = '/admin-login.html';
+                }, 2000);
+            });
+    });
+}
+// ------------------ Show Message Box ------------------
+function showMessage(message, type='info', showConfirm=false, confirmCallback=null){
+  const messageBox = document.getElementById('messageBox');
+  const messageContent = document.getElementById('messageContent');
+  messageContent.textContent = message;
+  messageBox.className = 'message-box';
+  messageBox.classList.add(type);
+
+  if(showConfirm){
+    const confirmHTML = `
+      <div style="margin-top:10px;display:flex;gap:10px;">
+        <button class="save-btn" id="confirmYes" style="background: var(--secondary);">Yes</button>
+        <button class="save-btn delete-btn" id="confirmNo">No</button>
+      </div>`;
+    messageContent.innerHTML = message + confirmHTML;
+    messageBox.classList.add('show');
+
+    document.getElementById('confirmYes').addEventListener('click', () => { 
+      messageBox.classList.remove('show'); 
+      if(confirmCallback) confirmCallback(); 
+    });
+    document.getElementById('confirmNo').addEventListener('click', () => messageBox.classList.remove('show'));
+  } else {
+    messageBox.classList.add('show');
+    setTimeout(()=>messageBox.classList.remove('show'),5000);
+  }
+}
+
+// ------------------ Unified Event Delegation ------------------
+document.addEventListener('click', e => {
+  const target = e.target.closest('button');
+  if(!target) return;
+  const type = target.dataset.type;
+  const id = target.dataset.id;
+
+  if(target.classList.contains('delete-btn') && !target.classList.contains('reject-btn')) deleteItem(type,id);
+  else if(target.classList.contains('view-btn')) viewAppointments(type,id);
+  else if(target.classList.contains('approve-btn')) approveDoctor(id,'approve');
+  else if(target.classList.contains('reject-btn')) approveDoctor(id,'reject');
+});
+
+// ------------------ Load Initial Stats ------------------
+window.addEventListener('load', () => {
+  ['doctors','patients','appointments','accountants'].forEach(section => {
+    fetch(`/admin/${section}`)
+      .then(res => res.json())
+      .then(data => updateStats(section,data.length))
+      .catch(err => console.error(`Error loading ${section} count:`,err));
+  });
+});
+
+// ------------------ Enhanced Error Handler ------------------
+function handleApiError(err, context) {
+  console.error(`❌ ${context} error:`, err);
+  
+  if (err.message.includes('fetch') || err.message.includes('Network')) {
+    return 'Network error: Please check your connection';
+  }
+  
+  return err.message || `Unknown error during ${context}`;
+}
+</script>
+
+</body>
+</html>

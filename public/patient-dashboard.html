@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link rel="icon" type="image/x-icon" href="favicon.png">
+  <title>Patient Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #0096c7;
+      --primary-dark: #0077b6;
+      --secondary: #48cae4;
+      --success: #28a745;
+      --error: #dc3545;
+      --warning: #ffc107;
+      --bg-color: #f4f6fa;
+      --card-bg: #ffffff;
+      --text-dark: #333333;
+      --text-light: #666666;
+      --border-radius: 12px;
+      --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      --transition: all 0.3s ease;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Poppins", sans-serif;
+      background: var(--bg-color);
+      color: var(--text-dark);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* Header Styles */
+    header {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      padding: 1rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      animation: slideDown 0.5s ease;
+    }
+
+    @keyframes slideDown {
+      from { transform: translateY(-100%); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    header h1 {
+      font-size: 1.4rem;
+      font-weight: 600;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-container i {
+      font-size: 1.6rem;
+    }
+
+    /* Container Styles */
+    .container {
+      padding: 1.5rem;
+      max-width: 1400px;
+      margin: 0 auto;
+      animation: fadeIn 0.8s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Button Styles */
+    button {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      font-weight: 500;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    button:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    button.secondary {
+      background: #6c757d;
+    }
+
+    button.secondary:hover {
+      background: #5a6268;
+    }
+
+    button.danger {
+      background: var(--error);
+    }
+
+    button.danger:hover {
+      background: #c82333;
+    }
+
+    /* Table Styles */
+    .table-container {
+      background: var(--card-bg);
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      margin-top: 1.5rem;
+      animation: scaleIn 0.5s ease;
+    }
+
+    @keyframes scaleIn {
+      from { transform: scale(0.95); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      padding: 1rem;
+      text-align: left;
+      border-bottom: 1px solid #eaeaea;
+    }
+
+    th {
+      background: var(--primary);
+      color: white;
+      font-weight: 600;
+      position: sticky;
+      top: 0;
+    }
+
+    tr {
+      transition: var(--transition);
+    }
+
+    tr:hover {
+      background: #f8f9fa;
+      transform: translateY(-1px);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    }
+
+    tr:nth-child(even) {
+      background: #f9f9f9;
+    }
+
+  /* Status Badges */
+.status {
+  padding: 0.45rem 0.9rem;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  display: inline-block;
+  text-align: center;
+  min-width: 95px;
+  text-transform: capitalize;
+  border: 1px solid transparent;
+}
+
+/* Pending */
+.status.pending {
+  background: rgba(255, 193, 7, 0.2);
+  color: #b58100;
+  border-color: #ffc107;
+}
+
+/* Completed */
+.status.completed {
+  background: rgba(40, 167, 69, 0.2);
+  color: #1e7e34;
+  border-color: #28a745;
+}
+
+/* Cancelled */
+.status.cancelled,
+.status.canceled {
+  background: rgba(220, 53, 69, 0.2);
+  color: #a71d2a;
+  border-color: #dc3545;
+}
+
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
+    .Pending {
+      background: var(--warning);
+      color: #000;
+    }
+
+    .Completed {
+      background: var(--success);
+    }
+
+    .Cancelled {
+      background: var(--error);
+    }
+
+    /* Message Box */
+    .message-box {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 1rem 1.5rem;
+      border-radius: var(--border-radius);
+      color: white;
+      display: none;
+      font-weight: 500;
+      z-index: 1000;
+      box-shadow: var(--shadow);
+      animation: slideInRight 0.5s ease, slideOutRight 0.5s ease 3s forwards;
+      max-width: 400px;
+    }
+
+    @keyframes slideInRight {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    @keyframes slideOutRight {
+      from { transform: translateX(0); opacity: 1; }
+      to { transform: translateX(100%); opacity: 0; }
+    }
+
+    .message-box.success { 
+      background: var(--success);
+    }
+    
+    .message-box.error { 
+      background: var(--error);
+    }
+
+    /* Form Popup */
+    .form-popup {
+      background: white;
+      padding: 2rem;
+      border-radius: var(--border-radius);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      width: 90%;
+      max-width: 500px;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.9);
+      display: none;
+      z-index: 1001;
+      animation: popIn 0.3s ease forwards;
+    }
+
+    @keyframes popIn {
+      to { transform: translate(-50%, -50%) scale(1); }
+    }
+
+    .form-popup h3 {
+      margin-top: 0;
+      margin-bottom: 1.5rem;
+      color: var(--primary);
+      font-size: 1.5rem;
+    }
+
+    .form-popup label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: var(--text-dark);
+    }
+
+    .form-popup input, 
+    .form-popup select, 
+    .form-popup textarea {
+      width: 100%;
+      padding: 0.75rem;
+      margin-bottom: 1.2rem;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+      font-family: "Poppins", sans-serif;
+      transition: var(--transition);
+    }
+
+    .form-popup input:focus, 
+    .form-popup select:focus, 
+    .form-popup textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(0, 150, 199, 0.2);
+    }
+
+    .overlay {
+      display: none;
+      position: fixed;
+      top: 0; 
+      left: 0;
+      width: 100%; 
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      animation: fadeIn 0.3s ease;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 1200px) {
+      .container {
+        padding: 1.2rem;
+      }
+    }
+
+    @media (max-width: 992px) {
+      header {
+        padding: 1rem;
+      }
+      
+      header h1 {
+        font-size: 1.2rem;
+      }
+      
+      .container {
+        padding: 1rem;
+      }
+      
+      th, td {
+        padding: 0.8rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .table-container {
+        overflow-x: auto;
+      }
+      
+      table {
+        min-width: 700px;
+      }
+      
+      .form-popup {
+        width: 95%;
+        padding: 1.5rem;
+      }
+      
+      button {
+        padding: 0.7rem 1.2rem;
+        font-size: 0.9rem;
+      }
+    }
+
+    @media (max-width: 576px) {
+      header {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+      }
+      
+      .container {
+        padding: 0.8rem;
+      }
+      
+      .form-popup {
+        padding: 1.2rem;
+      }
+      
+      th, td {
+        padding: 0.6rem;
+        font-size: 0.9rem;
+      }
+      
+      .status {
+        font-size: 0.8rem;
+        min-width: 80px;
+        padding: 0.3rem 0.6rem;
+      }
+    }
+
+    /* Loading Animation */
+    .loading {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255,255,255,.3);
+      border-radius: 50%;
+      border-top-color: #fff;
+      animation: spin 1s ease-in-out infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Real-time update indicator */
+    .update-indicator {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: var(--success);
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: var(--border-radius);
+      display: none;
+      align-items: center;
+      gap: 8px;
+      box-shadow: var(--shadow);
+      z-index: 999;
+      animation: slideInUp 0.5s ease;
+    }
+
+    @keyframes slideInUp {
+      from { transform: translateY(100%); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    /* Card layout for small screens */
+    .appointment-cards {
+      display: none;
+      flex-direction: column;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .appointment-card {
+      background: var(--card-bg);
+      border-radius: var(--border-radius);
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+    }
+
+    .appointment-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.8rem;
+    }
+
+    .card-label {
+      font-weight: 600;
+      color: var(--text-light);
+    }
+
+    @media (max-width: 768px) {
+      table {
+        display: none;
+      }
+      
+      .appointment-cards {
+        display: flex;
+      }
+    }
+
+    /* Empty state */
+    .empty-state {
+      text-align: center;
+      padding: 3rem 1rem;
+      color: var(--text-light);
+    }
+
+    .empty-state i {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      color: #ddd;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo-container">
+      <i class="fas fa-heartbeat"></i>
+      <h1 id="welcomePatient">Welcome, Patient</h1>
+    </div>
+    <button onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+  </header>
+
+  <div class="container">
+    <button onclick="openForm()"><i class="fas fa-calendar-plus"></i> Book Appointment</button>
+
+    <h2>Your Appointments</h2>
+    
+    <!-- Table View -->
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Doctor</th>
+            <th>Specialization</th>
+            <th>Date & Time</th>
+            <th>Reason</th>
+            <th>Status</th>
+            <th>Report / Prescription / Billing</th>
+          </tr>
+        </thead>
+        <tbody id="appointmentsTable"></tbody>
+      </table>
+    </div>
+    
+    <!-- Card View for Mobile -->
+    <div class="appointment-cards" id="appointmentsCards"></div>
+  </div>
+
+  <div id="messageBox" class="message-box"></div>
+  <div id="updateIndicator" class="update-indicator">
+    <i class="fas fa-sync-alt"></i>
+    <span>Appointments Updated</span>
+  </div>
+
+  <!-- Appointment Form Popup -->
+  <div class="overlay" id="overlay" onclick="closeForm()"></div>
+  <div class="form-popup" id="appointmentForm">
+    <h3><i class="fas fa-calendar-check"></i> Book New Appointment</h3>
+    <label for="doctorSelect">Choose Doctor:</label>
+    <select id="doctorSelect"></select>
+
+    <label for="appointmentTime">Date & Time:</label>
+    <input type="datetime-local" id="appointmentTime" required min="">
+
+    <label for="reason">Reason:</label>
+    <textarea id="reason" rows="3" placeholder="Describe your issue"></textarea>
+
+    <div style="display: flex; gap: 10px;">
+      <button onclick="bookAppointment()" style="flex: 1;"><i class="fas fa-paper-plane"></i> Submit</button>
+      <button class="danger" onclick="closeForm()" style="flex: 1;"><i class="fas fa-times"></i> Cancel</button>
+    </div>
+  </div>
+
+  <script>
+    // 🕒 Prevent booking past dates
+    function setMinDateTime() {
+      const now = new Date();
+      const localISOTime = now.toISOString().slice(0, 16);
+      document.getElementById("appointmentTime").min = localISOTime;
+    }
+
+    // Set minimum date/time when form opens
+    document.getElementById("appointmentTime")?.addEventListener("focus", setMinDateTime);
+
+    const patient = JSON.parse(localStorage.getItem("patient"));
+    if (!patient) window.location.href = "login.html";
+
+    document.getElementById("welcomePatient").textContent = `Welcome, ${patient.full_name}`;
+    const messageBox = document.getElementById("messageBox");
+    const updateIndicator = document.getElementById("updateIndicator");
+
+    function showMessage(msg, type = "success") {
+      messageBox.textContent = msg;
+      messageBox.className = `message-box ${type}`;
+      messageBox.style.display = "block";
+      setTimeout(() => messageBox.style.display = "none", 3500);
+    }
+
+    function showUpdateIndicator() {
+      updateIndicator.style.display = "flex";
+      setTimeout(() => {
+        updateIndicator.style.display = "none";
+      }, 3000);
+    }
+
+    // 🩺 Load available doctors
+    async function loadDoctors() {
+      try {
+        const res = await fetch("http://localhost:3050/api/doctors");
+        const doctors = await res.json();
+        const select = document.getElementById("doctorSelect");
+        select.innerHTML = "";
+        doctors.forEach(doc => {
+          const opt = document.createElement("option");
+          opt.value = doc.id;
+          opt.textContent = `${doc.full_name} (${doc.specialization})`;
+          select.appendChild(opt);
+        });
+      } catch (error) {
+        console.error("Error loading doctors:", error);
+        showMessage("Failed to load doctors list.", "error");
+      }
+    }
+
+    // 📅 Load appointments for this patient
+    async function loadAppointments() {
+      try {
+        const res = await fetch(`http://localhost:3050/api/patient/${patient.id}/appointments`);
+        const data = await res.json();
+        const tbody = document.getElementById("appointmentsTable");
+        const cardsContainer = document.getElementById("appointmentsCards");
+        
+        tbody.innerHTML = "";
+        cardsContainer.innerHTML = "";
+
+        if (!data.length) {
+          tbody.innerHTML = `
+            <tr>
+              <td colspan="6" class="empty-state">
+                <i class="fas fa-calendar-times"></i>
+                <h3>No appointments yet</h3>
+                <p>Book your first appointment to get started</p>
+              </td>
+            </tr>`;
+          
+          cardsContainer.innerHTML = `
+            <div class="empty-state">
+              <i class="fas fa-calendar-times"></i>
+              <h3>No appointments yet</h3>
+              <p>Book your first appointment to get started</p>
+            </div>`;
+          return;
+        }
+
+        data.forEach(a => {
+          // Table row
+          tbody.innerHTML += `
+            <tr>
+              <td>${a.doctor_name}</td>
+              <td>${a.specialization}</td>
+              <td>${formatDateTime(a.appointment_time)}</td>
+              <td>${a.reason}</td>
+              <td>
+                <span class="status ${a.status.toLowerCase()}">
+                  ${a.status}
+                </span>
+              </td>
+              <td>
+                ${
+                  a.status === "Completed" || a.prescription || a.report || a.billing
+
+                    ? `<strong>Prescription:</strong> ${a.prescription || "—"}<br>
+                       <strong>Billing:</strong> ${a.billing || "—"}<br>
+                       <strong>Report:</strong> ${a.report || "—"}`
+                    : "<em>Waiting for doctor...</em>"
+                }
+              </td>
+            </tr>`;
+            
+          // Card for mobile
+          cardsContainer.innerHTML += `
+            <div class="appointment-card">
+              <div class="card-row">
+                <span class="card-label">Doctor:</span>
+                <span>${a.doctor_name}</span>
+              </div>
+              <div class="card-row">
+                <span class="card-label">Specialization:</span>
+                <span>${a.specialization}</span>
+              </div>
+              <div class="card-row">
+                <span class="card-label">Date & Time:</span>
+                <span>${formatDateTime(a.appointment_time)}</span>
+              </div>
+              <div class="card-row">
+                <span class="card-label">Reason:</span>
+                <span>${a.reason}</span>
+              </div>
+              <div class="card-row">
+                <span class="card-label">Status:</span>
+              <span class="status ${a.status.toLowerCase()}">
+                ${a.status}
+              </span>
+              </div>
+              <div class="card-row">
+                <span class="card-label">Details:</span>
+                <span>
+                  ${
+                    a.status === "Completed" || a.prescription || a.report || a.billing
+
+                      ? `Prescription: ${a.prescription || "—"} | Billing: ${a.billing || "—"}`
+                      : "Waiting for doctor..."
+                  }
+                </span>
+              </div>
+            </div>`;
+        });
+      } catch (e) {
+        console.error("Error loading appointments:", e);
+        showMessage("Failed to load appointments.", "error");
+      }
+    }
+
+    // ✉️ Book a new appointment
+    async function bookAppointment() {
+      const doctor_id = document.getElementById("doctorSelect").value;
+      const appointment_time = document.getElementById("appointmentTime").value;
+      const reason = document.getElementById("reason").value;
+
+      if (!doctor_id || !appointment_time || !reason.trim()) {
+        showMessage("Please fill all fields.", "error");
+        return;
+      }
+
+      const payload = {
+        patient_id: patient.id,
+        doctor_id,
+        appointment_time,
+        reason
+      };
+
+      try {
+        const res = await fetch("http://localhost:3050/api/appointments", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+
+        const result = await res.json();
+
+        if (res.status === 400 && result.message === "You cannot book an appointment in the past.") {
+          showMessage("You cannot book an appointment in the past.", "error");
+          return;
+        }
+
+        if (result.success) {
+          showMessage("Appointment booked successfully!");
+          closeForm();
+          loadAppointments();
+        } else {
+          showMessage(result.message || "Failed to book appointment.", "error");
+        }
+      } catch (e) {
+        console.error(e);
+        showMessage("Error connecting to server.", "error");
+      }
+    }
+
+    function openForm() {
+      const form = document.getElementById("appointmentForm");
+      const overlay = document.getElementById("overlay");
+      const timeInput = document.getElementById("appointmentTime");
+
+      // 🕒 Set the minimum date/time to "now"
+      const now = new Date();
+      now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+      timeInput.min = now.toISOString().slice(0, 16);
+
+      form.style.display = "block";
+      overlay.style.display = "block";
+      loadDoctors();
+    }
+
+    function closeForm() {
+      document.getElementById("appointmentForm").style.display = "none";
+      document.getElementById("overlay").style.display = "none";
+      // Reset form
+      document.getElementById("reason").value = "";
+    }
+
+    function logout() {
+      localStorage.removeItem("patient");
+      window.location.href = "login.html";
+    }
+
+    function formatDateTime(datetime) {
+      if (!datetime) return "—";
+      const isoString = datetime.replace(" ", "T");
+      const d = new Date(isoString);
+      if (isNaN(d)) return datetime;
+      return d.toLocaleString([], { dateStyle: "medium", timeStyle: "short" });
+    }
+
+    // 🕒 Real-time updates: listen for doctor responses
+    document.addEventListener("DOMContentLoaded", () => {
+      loadAppointments();
+
+      const eventSource = new EventSource("http://localhost:3050/events");
+
+      eventSource.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+        if (data.type === "appointmentUpdate") {
+          console.log("🔔 Appointment update detected, refreshing...");
+          showUpdateIndicator();
+          setTimeout(() => {
+            loadAppointments();
+          }, 500);
+        }
+      };
+
+      eventSource.onerror = (err) => {
+        console.error("SSE connection error:", err);
+      };
+    });
+
+    // Add responsive behavior for window resize
+    window.addEventListener('resize', function() {
+      // This ensures proper rendering on orientation change
+      setTimeout(loadAppointments, 100);
+    });
+  </script>
+</body>
+</html>

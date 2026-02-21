@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link rel="icon" type="image/x-icon" href="favicon.png">
+    <title>MediCare Hospital - Login</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
+        :root {
+            --primary-blue: #3498db;
+            --dark-blue: #2980b9;
+            --light-blue: #e8f4fc;
+            --text-dark: #2c3e50;
+            --text-light: #7f8c8d;
+            --border-color: #e0e0e0;
+            --success-green: #2ecc71;
+            --error-red: #e74c3c;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--text-dark);
+            background-color: #f8f9fa;
+            overflow-x: hidden;
+        }
+        
+        .professional-navbar {
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            padding: 12px 0;
+            transition: all 0.3s ease;
+        }
+        
+        .sticky-nav {
+            position: sticky;
+            top: 20px;
+            margin: 0 30px;
+            z-index: 1050;
+            border-radius: 50px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .sticky-nav.scrolled {
+            background: rgba(255, 255, 255, 0.98);
+            box-shadow: 0 6px 25px rgba(0,0,0,0.15);
+            padding-top: 0.3rem;
+            padding-bottom: 0.3rem;
+            top: 0;
+            margin: 0;
+            border-radius: 0;
+        }
+        
+        .navbar-brand {
+            color: var(--text-dark);
+            font-size: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+        
+        .navbar-brand:hover {
+            transform: scale(1.05);
+        }
+        
+        .navbar-brand i {
+            color: var(--primary-blue);
+        }
+        
+        .nav-link {
+            color: var(--text-dark) !important;
+            font-weight: 500;
+            margin: 0 8px;
+            transition: color 0.3s;
+            position: relative;
+        }
+        
+        .nav-link:hover, .nav-link.active {
+            color: var(--primary-blue) !important;
+        }
+        
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--primary-blue);
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+        
+        .custom-toggler {
+            border: none;
+            padding: 4px 8px;
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+        
+        .custom-toggler:hover {
+            transform: scale(1.1);
+        }
+        
+        .custom-toggler .navbar-toggler-icon {
+            transition: opacity 0.3s;
+        }
+        
+        .custom-toggler .close-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 1.5rem;
+            line-height: 1;
+        }
+        
+        .custom-toggler[aria-expanded="true"] .navbar-toggler-icon {
+            opacity: 0;
+        }
+        
+        .custom-toggler[aria-expanded="true"] .close-icon {
+            opacity: 1;
+        }
+        
+        /* Login Button Styles */
+        .login-btn {
+            background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue));
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 8px 20px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(52, 152, 219, 0.2);
+            margin-left: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .login-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+        
+        .login-btn:hover::before {
+            left: 100%;
+        }
+        
+        .login-btn:hover {
+            background: linear-gradient(135deg, var(--dark-blue), #2471a3);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(52, 152, 219, 0.3);
+            color: white;
+        }
+        
+        .login-btn:active {
+            transform: translateY(0);
+        }
+        
+        /* Login Section Styles */
+        .login-section {
+            padding: 80px 0;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .login-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: float 20s infinite linear;
+            z-index: 0;
+        }
+        
+        @keyframes float {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            100% { transform: translate(-50px, -50px) rotate(360deg); }
+        }
+        
+        .login-header {
+            text-align: center;
+            margin-bottom: 50px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .login-header h1 {
+            color: var(--text-dark);
+            font-weight: 700;
+            margin-bottom: 15px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s ease forwards;
+        }
+        
+        .login-header p {
+            color: var(--text-light);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s ease 0.2s forwards;
+        }
+        
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .login-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            height: 100%;
+            border: none;
+            overflow: hidden;
+            position: relative;
+            z-index: 1;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        
+        .login-card.animate-in {
+            animation: cardSlideIn 0.6s ease forwards;
+        }
+        
+        .doctor-card {
+            animation-delay: 0.3s;
+        }
+        
+        .patient-card {
+            animation-delay: 0.5s;
+        }
+        
+        @keyframes cardSlideIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .login-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+        }
+        
+        .card-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            font-size: 2rem;
+            transition: transform 0.5s ease;
+        }
+        
+        .login-card:hover .card-icon {
+            transform: rotateY(180deg);
+        }
+        
+        .doctor-card .card-icon {
+            background: rgba(52, 152, 219, 0.1);
+            color: var(--primary-blue);
+        }
+        
+        .patient-card .card-icon {
+            background: rgba(46, 204, 113, 0.1);
+            color: #2ecc71;
+        }
+        
+        .login-card h3 {
+            font-weight: 600;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .login-card p {
+            color: var(--text-light);
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        
+        .form-control {
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 12px 15px;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+            position: relative;
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+            transform: translateY(-2px);
+        }
+        
+        .form-control.success {
+            border-color: var(--success-green);
+            box-shadow: 0 0 0 0.2rem rgba(46, 204, 113, 0.25);
+        }
+        
+        .form-control.error {
+            border-color: var(--error-red);
+            box-shadow: 0 0 0 0.2rem rgba(231, 76, 60, 0.25);
+        }
+        
+        .input-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .form-control.success + .input-icon.success {
+            opacity: 1;
+            color: var(--success-green);
+        }
+        
+        .form-control.error + .input-icon.error {
+            opacity: 1;
+            color: var(--error-red);
+        }
+        
+        .btn-login {
+            background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue));
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 12px;
+            font-weight: 500;
+            width: 100%;
+            transition: all 0.3s;
+            margin-top: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-login::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 5px;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.5);
+            opacity: 0;
+            border-radius: 100%;
+            transform: scale(1, 1) translate(-50%);
+            transform-origin: 50% 50%;
+        }
+        
+        .btn-login:focus:not(:active)::after {
+            animation: ripple 1s ease-out;
+        }
+        
+        @keyframes ripple {
+            0% {
+                transform: scale(0, 0);
+                opacity: 0.5;
+            }
+            100% {
+                transform: scale(20, 20);
+                opacity: 0;
+            }
+        }
+        
+        .btn-login:hover {
+            background: linear-gradient(135deg, var(--dark-blue), #2471a3);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3);
+        }
+        
+        .btn-login:active {
+            transform: translateY(0);
+        }
+        
+        .btn-login.loading {
+            pointer-events: none;
+            opacity: 0.7;
+        }
+        
+        .btn-login.loading::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            margin: -10px 0 0 -10px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .login-links {
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .login-links a {
+            color: var(--primary-blue);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            position: relative;
+        }
+        
+        .login-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background-color: var(--primary-blue);
+            transition: width 0.3s;
+        }
+        
+        .login-links a:hover::after {
+            width: 100%;
+        }
+        
+        .login-links a:hover {
+            text-decoration: none;
+        }
+        
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 30px 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .divider::before, .divider::after {
+            content: "";
+            flex: 1;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .divider span {
+            padding: 0 15px;
+            color: var(--text-light);
+            font-size: 0.9rem;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.05);
+        }
+        
+        /* Toast notifications */
+        .toast-container {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            z-index: 1060;
+        }
+        
+        .toast {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            padding: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            max-width: 350px;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+        }
+        
+        .toast.show {
+            transform: translateX(0);
+        }
+        
+        .toast.success {
+            border-left: 4px solid var(--success-green);
+        }
+        
+        .toast.error {
+            border-left: 4px solid var(--error-red);
+        }
+        
+        .toast-icon {
+            font-size: 1.5rem;
+            margin-right: 15px;
+        }
+        
+        .toast.success .toast-icon {
+            color: var(--success-green);
+        }
+        
+        .toast.error .toast-icon {
+            color: var(--error-red);
+        }
+        
+        .toast-content {
+            flex: 1;
+        }
+        
+        .toast-close {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: opacity 0.3s;
+        }
+        
+        .toast-close:hover {
+            opacity: 1;
+        }
+        
+        /* Mobile adjustments */
+        @media (max-width: 991.98px) {
+            .sticky-nav {
+                margin: 0;
+                border-radius: 0;
+                top: 0;
+            }
+            
+            .login-btn {
+                margin: 15px 0 0 0;
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .navbar-nav {
+                padding-bottom: 10px;
+            }
+            
+            .login-card {
+                margin-bottom: 30px;
+            }
+        }
+        
+        @media (max-width: 767.98px) {
+            .login-section {
+                padding: 50px 0;
+            }
+            
+            .login-header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .toast-container {
+                right: 10px;
+                left: 10px;
+            }
+            
+            .toast {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white professional-navbar sticky-nav">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="#">
+                <i class="fas fa-hospital-alt me-2"></i>MediCare Hospital
+            </a>
+
+            <button class="navbar-toggler custom-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+                <span class="close-icon">×</span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html#home">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html#about">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html#departments">Departments</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html#services">Services</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html#find-doctor">Doctors</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html#contact">Contact</a>
+                    </li>
+                </ul>
+                
+                <!-- Login Button -->
+                <button class="btn login-btn" onclick="scrollToLogin()">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Toast Notifications -->
+    <div class="toast-container"></div>
+
+    <!-- Login Section -->
+    <section class="login-section" id="login">
+        <div class="container">
+            <div class="login-header">
+                <h1>Access Your MediCare Account</h1>
+                <p>Select your role to securely login to the MediCare Hospital portal</p>
+            </div>
+            
+            <div class="row justify-content-center">
+                <!-- Doctor Login Card -->
+                <div class="col-lg-5 col-md-6 mb-4">
+                    <div class="card login-card doctor-card">
+                        <div class="card-body p-4">
+                            <div class="card-icon">
+                                <i class="fas fa-user-md"></i>
+                            </div>
+                            <h3>Doctor Login</h3>
+                            <p>Access medical records, patient information, and scheduling tools</p>
+                            
+                            <form id="doctorLoginForm">
+                                <div class="mb-3 position-relative">
+                                    <input type="text" class="form-control" name="license_number" placeholder="License Number" required>
+                                    <i class="fas fa-check input-icon success"></i>
+                                    <i class="fas fa-exclamation input-icon error"></i>
+                                </div>
+                                <div class="mb-3 position-relative">
+                                    <input type="password" class="form-control" name="password" placeholder="Password" required>
+                                    <i class="fas fa-check input-icon success"></i>
+                                    <i class="fas fa-exclamation input-icon error"></i>
+                                </div>
+                                <div class="form-check mb-3">
+                                    <input class="form-check-input" type="checkbox" id="doctorRemember">
+                                    <label class="form-check-label" for="doctorRemember">
+                                        Remember me
+                                    </label>
+                                </div>
+                                <button type="submit" class="btn btn-login">Login as Doctor</button>
+                            </form>
+                            
+                            <div class="login-links">
+                                <a href="recovery.html"> Forgot License Number or Password?</a> |
+                                <a href="signup.html">Create Doctor's Account</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-2 col-md-12 d-flex align-items-center justify-content-center my-4">
+                    <div class="divider d-none d-lg-block">
+                        <span>OR</span>
+                    </div>
+                </div>
+                
+                <!-- Patient Login Card -->
+                <div class="col-lg-5 col-md-6 mb-4">
+                    <div class="card login-card patient-card">
+                        <div class="card-body p-4">
+                            <div class="card-icon">
+                                <i class="fas fa-user-injured"></i>
+                            </div>
+                            <h3>Patient Login</h3>
+                            <p>View your medical records, appointments, and communicate with your care team</p>
+                            
+                            <form id="patientLoginForm">
+                                <div class="mb-3 position-relative">
+                                    <input type="text" class="form-control" name="email" placeholder="Email" required>
+                                    <i class="fas fa-check input-icon success"></i>
+                                    <i class="fas fa-exclamation input-icon error"></i>
+                                </div>
+                                <div class="mb-3 position-relative">
+                                    <input type="password" class="form-control" name="password" placeholder="Password" required>
+                                    <i class="fas fa-check input-icon success"></i>
+                                    <i class="fas fa-exclamation input-icon error"></i>
+                                </div>
+                                <div class="form-check mb-3">
+                                    <input class="form-check-input" type="checkbox" id="patientRemember">
+                                    <label class="form-check-label" for="patientRemember">
+                                        Remember me
+                                    </label>
+                                </div>
+                                <button type="submit" class="btn btn-login">Login as Patient</button>
+                            </form>
+                            
+                            <div class="login-links">
+                                <a href="recovery.html">Forgot Patient Email or Password?</a> | 
+                                <a href="signup.html">Create Patient Account</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+           
+        </div>
+    </section>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Initialize animations when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animate login cards
+            const loginCards = document.querySelectorAll('.login-card');
+            loginCards.forEach(card => {
+                card.classList.add('animate-in');
+            });
+            
+            // Add scroll effect to navbar
+            window.addEventListener('scroll', function() {
+                const navbar = document.querySelector('.sticky-nav');
+                if (window.scrollY > 50) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+            });
+            
+            // Add input validation with visual feedback
+            const inputs = document.querySelectorAll('.form-control');
+            inputs.forEach(input => {
+                input.addEventListener('blur', function() {
+                    if (this.value.trim() !== '') {
+                        this.classList.add('success');
+                        this.classList.remove('error');
+                    } else {
+                        this.classList.add('error');
+                        this.classList.remove('success');
+                    }
+                });
+                
+                input.addEventListener('input', function() {
+                    if (this.value.trim() !== '') {
+                        this.classList.remove('error');
+                    }
+                });
+            });
+        });
+        
+        // Simple scroll to login section function
+        function scrollToLogin() {
+            document.getElementById('login').scrollIntoView({ 
+                behavior: 'smooth' 
+            });
+        }
+        
+        // Toast notification function
+        function showToast(message, type = 'success') {
+            const toastContainer = document.querySelector('.toast-container');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            
+            const icon = type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle';
+            
+            toast.innerHTML = `
+                <i class="fas ${icon} toast-icon"></i>
+                <div class="toast-content">${message}</div>
+                <button class="toast-close"><i class="fas fa-times"></i></button>
+            `;
+            
+            toastContainer.appendChild(toast);
+            
+            // Show toast with animation
+            setTimeout(() => {
+                toast.classList.add('show');
+            }, 100);
+            
+            // Close toast on button click
+            const closeBtn = toast.querySelector('.toast-close');
+            closeBtn.addEventListener('click', function() {
+                toast.classList.remove('show');
+                setTimeout(() => {
+                    toastContainer.removeChild(toast);
+                }, 300);
+            });
+            
+            // Auto-remove toast after 5 seconds
+            setTimeout(() => {
+                if (toast.parentNode) {
+                    toast.classList.remove('show');
+                    setTimeout(() => {
+                        if (toast.parentNode) {
+                            toastContainer.removeChild(toast);
+                        }
+                    }, 300);
+                }
+            }, 5000);
+        }
+        
+        // Simulate login process with loading state
+        function simulateLogin(form, role) {
+            const button = form.querySelector('.btn-login');
+            const originalText = button.innerHTML;
+            
+            // Show loading state
+            button.classList.add('loading');
+            button.innerHTML = '';
+            
+            // Simulate API call
+            setTimeout(() => {
+                // Remove loading state
+                button.classList.remove('loading');
+                button.innerHTML = originalText;
+                
+                // Randomly determine success or failure for demo
+                const isSuccess = Math.random() > 0.3;
+            }, 2000);
+        }
+        
+        // Form submission handlers
+        document.getElementById('doctorLoginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Validate form
+            const inputs = this.querySelectorAll('input[required]');
+            let isValid = true;
+            
+            inputs.forEach(input => {
+                if (input.value.trim() === '') {
+                    input.classList.add('error');
+                    isValid = false;
+                }
+            });
+            
+            if (isValid) {
+                simulateLogin(this, 'Doctor');
+            } else {
+                showToast('Please fill in all required fields', 'error');
+            }
+        });
+        
+        document.getElementById('patientLoginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Validate form
+            const inputs = this.querySelectorAll('input[required]');
+            let isValid = true;
+            
+            inputs.forEach(input => {
+                if (input.value.trim() === '') {
+                    input.classList.add('error');
+                    isValid = false;
+                }
+            });
+            
+            if (isValid) {
+                simulateLogin(this, 'Patient');
+            } else {
+                showToast('Please fill in all required fields', 'error');
+            }
+        });
+        
+        // Add shake animation for form errors
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes shake {
+                0%, 100% { transform: translateX(0); }
+                10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+                20%, 40%, 60%, 80% { transform: translateX(5px); }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // === Replace simulateLogin with real login ===
+async function loginUser(form, role) {
+    const button = form.querySelector('.btn-login');
+    const originalText = button.innerHTML;
+
+    // Show loading state
+    button.classList.add('loading');
+    button.innerHTML = '';
+
+    const data = Object.fromEntries(new FormData(form).entries());
+    const endpoint = role === 'Doctor'
+        ? "http://localhost:3050/doctor-login"
+        : "http://localhost:3050/patient-login";
+
+    try {
+        const res = await fetch(endpoint, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data)
+        });
+
+        const result = await res.json();
+
+        // Remove loading state
+        button.classList.remove('loading');
+        button.innerHTML = originalText;
+
+        if (res.ok) {
+            showToast(result.message, 'success');
+
+            // Animate successful login
+            form.parentElement.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                form.parentElement.style.transform = 'scale(1)';
+            }, 300);
+
+            // Redirect after short delay
+            setTimeout(() => {
+                if (role === 'Doctor') {
+                    window.location.href = "doctor-dashboard.html";
+                } else {
+                    window.location.href = "patient-dashboard.html";
+                }
+            }, 2000);
+        } else {
+            showToast(result.message || `Invalid ${role.toLowerCase()} credentials.`, 'error');
+
+            // Shake form on error
+            form.style.animation = 'shake 0.5s';
+            setTimeout(() => {
+                form.style.animation = '';
+            }, 500);
+        }
+    } catch (err) {
+        button.classList.remove('loading');
+        button.innerHTML = originalText;
+        showToast("Server error", "error");
+    }
+}
+
+// === Patient Login Form ===
+document.getElementById('patientLoginForm').addEventListener('submit', async function (e) {
+  e.preventDefault();
+
+  const email = this.email.value.trim();
+  const password = this.password.value.trim();
+
+  if (!email || !password) {
+    showToast("Please fill in all fields", "error");
+    return;
+  }
+
+  try {
+    const res = await fetch('http://localhost:3050/login/patient', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password })
+    });
+
+    const result = await res.json();
+
+    if (res.ok) {
+      // ✅ Save patient info
+      localStorage.setItem("patient", JSON.stringify(result.patient));
+
+      // ✅ Show success message box (toast)
+      showToast(`Welcome, ${result.patient.full_name}! You have successfully logged in.`, "success");
+
+      // 🕐 Wait 1 second before redirecting
+      setTimeout(() => {
+        window.location.href = "patient-dashboard.html";
+      }, 1000);
+    } else {
+      // ❌ If login failed (e.g. invalid credentials)
+      showToast(result.message || "Invalid email or password", "error");
+    }
+
+  } catch (err) {
+    console.error("Patient login error:", err);
+    showToast("Server error. Please try again later.", "error");
+  }
+});
+
+
+//=== Doctor login Form  ===//
+document.getElementById('doctorLoginForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+
+  const license_number = this.license_number.value.trim();
+  const password = this.password.value.trim();
+
+  if (!license_number || !password) {
+    showToast('Please fill in all required fields', 'error');
+    return;
+  }
+
+  const button = this.querySelector('.btn-login');
+  const originalText = button.innerHTML;
+  button.classList.add('loading');
+  button.innerHTML = '';
+
+  try {
+    const res = await fetch("http://localhost:3050/doctor-login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ license_number, password }),
+    });
+
+    const data = await res.json();
+    console.log("🔍 Login response:", data); // 👈 Check what’s returned
+
+    button.classList.remove('loading');
+    button.innerHTML = originalText;
+
+    if (res.ok && data.doctor) {
+      // ✅ Save doctor data
+      localStorage.setItem("doctor", JSON.stringify(data.doctor));
+
+      showToast(`Welcome back, Dr. ${data.doctor.full_name}!`, "success");
+      setTimeout(() => window.location.href = "doctor-dashboard.html", 1000);
+    } else {
+      showToast(data.message || "Invalid credentials", "error");
+    }
+  } catch (err) {
+    console.error("❌ Doctor login error:", err);
+    button.classList.remove('loading');
+    button.innerHTML = originalText;
+    showToast("Server error. Please try again later.", "error");
+  }
+});
+
+    </script>
+</body>
+</html>
